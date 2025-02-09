@@ -1,15 +1,13 @@
-import './App.css'
-import { Button, HStack } from '@chakra-ui/react'
+import { BrowserRouter as Router } from "react-router-dom";
+import "./App.css";
+import AppRoutes from "./routes/AppRoute";
 
-function App() {
+const App: React.FC = () => {
   return (
-    <>
-      <HStack>
-        <Button >Click me</Button>
-        <Button>Click me</Button>
-      </HStack>
-    </>
-  )
-}
+      <Router>
+        <AppRoutes />
+      </Router>
+  );
+};
 
-export default App
+export default App;
