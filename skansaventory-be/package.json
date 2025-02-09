@@ -1,0 +1,23 @@
+{
+  "name": "skansaventory-be",
+  "scripts": {
+    "dev": "bun run --hot src/index.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.2.1",
+    "hono": "^4.6.19",
+    "jose": "^5.9.6",
+    "prisma": "^6.2.1",
+    "prisma-schema-generator": "^0.0.2",
+    "puppeteer": "^24.2.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "module": "index.ts",
+  "type": "module",
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

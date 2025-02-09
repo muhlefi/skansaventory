@@ -1,0 +1,144 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Jenis {
+  id_jenis   Int     @id @default(autoincrement())
+  nama_jenis String
+  kode_jenis String
+  keterangan String?
+
+  inventaris Inventaris[]
+
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?
+
+  @@map("jenis")
+}
+
+model Ruang {
+  id_ruang   Int     @id @default(autoincrement())
+  nama_ruang String
+  kode_ruang String
+  keterangan String?
+
+  inventaris Inventaris[]
+
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?
+
+  @@map("ruang")
+}
+
+model Inventaris {
+  id_inventaris    Int       @id @default(autoincrement())
+  nama             String
+  kondisi          String
+  keterangan       String?
+  jumlah           Int
+  id_jenis         Int
+  id_ruang         Int
+  id_petugas       Int
+  kode_inventaris  String
+  tanggal_register DateTime  @default(now())
+  created_at       DateTime  @default(now())
+  updated_at       DateTime  @updatedAt
+  deleted_at       DateTime?
+
+  detail_pinjam DetailPinjam[]
+
+  jenis   Jenis   @relation(fields: [id_jenis], references: [id_jenis])
+  ruang   Ruang   @relation(fields: [id_ruang], references: [id_ruang])
+  petugas Petugas @relation(fields: [id_petugas], references: [id_petugas])
+
+  @@map("inventaris")
+}
+
+model Petugas {
+  id_petugas   Int    @id @default(autoincrement())
+  username     String @unique
+  password     String
+  nama_petugas String
+  id_level     Int
+  id_pegawai   Int
+
+  level      Level        @relation(fields: [id_level], references: [id_level])
+  pegawai    Pegawai      @relation(fields: [id_pegawai], references: [id_pegawai])
+  inventaris Inventaris[]
+
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?
+
+  @@map("petugas")
+}
+
+model Level {
+  id_level   Int       @id @default(autoincrement())
+  nama_level String
+  petugas    Petugas[]
+
+  @@map("level")
+}
+
+model Peminjaman {
+  id_peminjaman     Int       @id @default(autoincrement())
+  tanggal_pinjam    DateTime  @default(now())
+  tanggal_kembali   DateTime?
+  status_peminjaman String
+  id_pegawai        Int
+
+  pegawai       Pegawai        @relation(fields: [id_pegawai], references: [id_pegawai])
+  detail_pinjam DetailPinjam[]
+
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?
+
+  @@map("peminjaman")
+}
+
+model DetailPinjam {
+  id_detail_pinjam Int @id @default(autoincrement())
+  id_inventaris    Int
+  id_peminjaman    Int
+  jumlah           Int
+
+  inventaris Inventaris @relation(fields: [id_inventaris], references: [id_inventaris])
+  peminjaman Peminjaman @relation(fields: [id_peminjaman], references: [id_peminjaman])
+
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?
+
+  @@map("detail_pinjam")
+}
+
+model Pegawai {
+  id_pegawai   Int     @id @default(autoincrement())
+  nama_pegawai String
+  nip          String  @unique
+  alamat       String?
+
+  peminjaman Peminjaman[]
+  petugas Petugas[]
+
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?
+
+  @@map("pegawai")
+}
