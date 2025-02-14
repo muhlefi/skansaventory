@@ -3,14 +3,15 @@ import { z } from 'zod';
 import prisma from "../../prisma/client";
 import { baseResponse } from '../helpers/BaseResponse';
 import { handlePaginate } from '../helpers/HandlePaginate';
+import bcrypt from 'bcrypt';
 
-export const getAllPegawai = async (c: Context) => {
+export const getAllPetugas = async (c: Context) => {
     try {
         const page = parseInt(c.req.query('page') || '1', 10)
         const perPage = parseInt(c.req.query('perPage') || '10', 10)
 
         const result = await handlePaginate(
-            prisma.pegawai,
+            prisma.petugas,
             { deleted_at: null },
             page,
             perPage
@@ -22,46 +23,53 @@ export const getAllPegawai = async (c: Context) => {
     }
 }
 
-export const showPegawaiById = async (c: Context) => {
+export const showPetugasById = async (c: Context) => {
     try {
         const id = c.req.param('id');
-        const pegawai = await prisma.pegawai.findUnique({
+        const petugas = await prisma.petugas.findUnique({
             where: {
-                id_pegawai: Number(id),
+                id_petugas: Number(id),
                 deleted_at: null
+            },
+            select: {
+                password: false
             }
         });
 
-        if (!pegawai) {
-            return baseResponse.error(c, 'Pegawai not found');
+        if (!petugas) {
+            return baseResponse.error(c, 'Petugas not found');
         }
 
-        return baseResponse.show(c, pegawai);
+        return baseResponse.show(c, petugas);
 
     } catch (e: unknown) {
         return baseResponse.error(c, `${e}`);
     }
 }
 
-export async function createPegawai(c: Context) {
+export async function createPetugas(c: Context) {
     try {
-        const body = await c.req.parseBody();
+        const body = await c.req.json();
         const rules = z.object({
             nama: z.string().min(1),
-            nip: z.string().min(18).max(18),
-            alamat: z.string().min(1),
+            username: z.string().min(1),
+            password: z.string().min(1),
+            id_level: z.number().min(1),
             id_pegawai: z.number().min(1)
         }).parse(body);
 
-        if (await prisma.pegawai.findFirst({ where: { nama_pegawai: rules.nama, nip: rules.nip, deleted_at: null } })) {
-            return baseResponse.error(c, 'nama atau nip sudah digunakan.');
+        if (await prisma.petugas.findFirst({ where: { nama_petugas: rules.nama, username: rules.username, deleted_at: null } })) {
+            return baseResponse.error(c, 'Name or username is already in use.');
         }
 
-        const result = await prisma.pegawai.create({
+        const hashedPassword = await bcrypt.hash(rules.password, 8);
+
+        const result = await prisma.petugas.create({
             data: {
-                nama_pegawai: rules.nama,
-                nip: rules.nip,
-                alamat: rules.alamat,
+                nama_petugas: rules.nama,
+                username: rules.username,
+                password: hashedPassword,
+                id_level: rules.id_level,
                 id_pegawai: rules.id_pegawai,
                 created_at: new Date(),
                 updated_at: new Date(),
@@ -69,9 +77,10 @@ export async function createPegawai(c: Context) {
         });
 
         if (result) {
-            return baseResponse.created(c, result);
+            const { password, ...responseData } = result;
+            return baseResponse.created(c, responseData);
         } else {
-            return baseResponse.error(c, 'Failed to create pegawai');
+            return baseResponse.error(c, 'Failed to create petugas');
         }
 
     } catch (e: unknown) {
@@ -79,27 +88,31 @@ export async function createPegawai(c: Context) {
     }
 }
 
-export async function updatePegawai(c: Context) {
+export async function updatePetugas(c: Context) {
     try {
         const id = parseInt(c.req.param('id'));
-        const body = await c.req.parseBody();
+        const body = await c.req.json();
         const rules = z.object({
             nama: z.string().min(1),
-            nip: z.string().min(18).max(18),
-            alamat: z.string().min(1),
+            username: z.string().min(1),
+            password: z.string().min(1),
+            id_level: z.number().min(1),
             id_pegawai: z.number().min(1)
         }).parse(body);
 
-        if (await prisma.pegawai.findFirst({ where: { nama_pegawai: rules.nama, nip: rules.nip, deleted_at: null } })) {
-            return baseResponse.error(c, 'nama atau nip sudah digunakan.');
+        if (await prisma.petugas.findFirst({ where: { nama_petugas: rules.nama, username: rules.username, deleted_at: null } })) {
+            return baseResponse.error(c, 'Name or username is already in use.');
         }
 
-        const result = await prisma.pegawai.update({
-            where: { id_pegawai: id },
+        const hashedPassword = await bcrypt.hash(rules.password, 8);
+
+        const result = await prisma.petugas.update({
+            where: { id_petugas: id },
             data: {
-                nama_pegawai: rules.nama,
-                nip: rules.nip,
-                alamat: rules.alamat,
+                nama_petugas: rules.nama,
+                username: rules.username,
+                password: hashedPassword,
+                id_level: rules.id_level,
                 id_pegawai: rules.id_pegawai,
                 created_at: new Date(),
                 updated_at: new Date(),
@@ -107,9 +120,10 @@ export async function updatePegawai(c: Context) {
         });
 
         if (result) {
-            return baseResponse.updated(c, result);
+            const { password, ...responseData } = result;
+            return baseResponse.updated(c, responseData);
         } else {
-            return baseResponse.error(c, 'Failed to update pegawai');
+            return baseResponse.error(c, 'Failed to update petugas');
         }
 
     } catch (e: unknown) {
@@ -117,11 +131,11 @@ export async function updatePegawai(c: Context) {
     }
 }
 
-export async function deletePegawai(c: Context) {
+export async function deletePetugas(c: Context) {
     try {
         const id = parseInt(c.req.param('id'));
-        const result = await prisma.pegawai.update({
-            where: { id_pegawai: id },
+        const result = await prisma.petugas.update({
+            where: { id_petugas: id },
             data: {
                 deleted_at: new Date()
             }
@@ -130,7 +144,7 @@ export async function deletePegawai(c: Context) {
         if (result) {
             return baseResponse.deleted(c);
         } else {
-            return baseResponse.error(c, 'Failed to delete pegawai');
+            return baseResponse.error(c, 'Failed to delete petugas');
         }
 
     } catch (e: unknown) {
@@ -140,15 +154,15 @@ export async function deletePegawai(c: Context) {
 
 export async function getCombobox(c: Context) {
     try {
-        const result = await prisma.pegawai.findMany({
-            select: { id_pegawai: true, nama_pegawai: true },
+        const result = await prisma.petugas.findMany({
+            select: { id_petugas: true, nama_petugas: true },
             where: { deleted_at: null },
-            orderBy: { id_pegawai: 'desc' },
+            orderBy: { id_petugas: 'desc' },
         });
 
         const formattedResult = result.map(j => ({
-            value: j.id_pegawai,
-            label: j.nama_pegawai
+            value: j.id_petugas,
+            label: j.nama_petugas
         }));
 
         return baseResponse.success(c, formattedResult);
