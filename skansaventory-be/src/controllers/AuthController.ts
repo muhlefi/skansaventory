@@ -34,7 +34,12 @@ export const login = async (c: Context) => {
     .setExpirationTime("1h")
     .sign(SECRET_KEY);
 
-  const refreshToken = await new SignJWT({ id_petugas: user.id_petugas })
+  const refreshToken = await new SignJWT({
+    id_petugas: user.id_petugas,
+    username: user.username,
+    role: user.level?.nama_level || "Unknown",
+    name: user.pegawai?.nama_pegawai || "Unknown",
+  })
     .setProtectedHeader({ alg: "HS256" })
     .setExpirationTime("7d")
     .sign(SECRET_KEY);
@@ -58,7 +63,12 @@ export const refreshToken = async (c: Context) => {
   
   try {
     const { payload } = await jwtVerify(refreshToken, SECRET_KEY);
-    const newAccessToken = await new SignJWT({ id_petugas: payload.id_petugas })
+    const newAccessToken = await new SignJWT({
+      id_petugas: payload.id_petugas,
+      username: payload.username,
+      role: payload?.role || "Unknown",
+      name: payload?.name || "Unknown",
+    })
       .setProtectedHeader({ alg: "HS256" })
       .setExpirationTime("1h")
       .sign(SECRET_KEY);
