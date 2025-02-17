@@ -1,10 +1,27 @@
-import { FC, memo } from "react";
-import DatatableHeaderView from "./DatatableHeader.view";
+import { ChangeEvent, FC, memo, useCallback, useContext } from "react";
+import DataTableHeaderView from "./DatatableHeader.view";
+import { DataTableHeaderProps } from "../Datatable.data";
+import { DataTablesContext } from "../../../dataservices/datatables/data";
 
+const DataTableHeader: FC<DataTableHeaderProps> = ({ renderDataButton, title, withButton, withFilter, withSearch, renderDataFilter}) => {
+    const { search, setSearch, handleDebounceSearch } = useContext(DataTablesContext);
 
-const DatatableHeader: FC = () => {
+    const handleSearch = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+        const value = event.target.value;
+        setSearch(value);
+        handleDebounceSearch(value);
+    }, [handleDebounceSearch]);
 
-    return <DatatableHeaderView/>;
+    return <DataTableHeaderView
+        title={title}
+        withButton={withButton}
+        withFilter={withFilter}
+        withSearch={withSearch}
+        renderDataFilter={renderDataFilter}
+        search={search}
+        handleSearch={handleSearch}
+        renderDataButton={renderDataButton}
+    />;
 };
 
-export default memo(DatatableHeader);
+export default memo(DataTableHeader);

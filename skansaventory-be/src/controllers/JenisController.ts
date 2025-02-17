@@ -4,9 +4,6 @@ import prisma from "../../prisma/client";
 import { baseResponse } from '../helpers/BaseResponse';
 import { handlePaginate } from '../helpers/HandlePaginate';
 
-/**
- * Getting all Jenis
- */
 export const getAllJenis = async (c: Context) => {
     try {
         const page = parseInt(c.req.query('page') || '1', 10)

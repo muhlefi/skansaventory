@@ -1,10 +1,12 @@
 import { FC, memo } from "react";
-import DatatableBodyView from "./DatatableBody.view";
+import DataTableBodyView from "./DatatableBody.view";
+import { DataTableBodyProps } from "../Datatable.data";
 
-
-const DatatableBody: FC = () => {
-
-    return <DatatableBodyView/>;
+const DataTablesBody: FC<DataTableBodyProps> = ({ renderTableHeader, renderTableBody }) => {
+    return <DataTableBodyView
+        renderTableHeader={renderTableHeader}
+        renderTableBody={renderTableBody}
+    />;
 };
 
-export default memo(DatatableBody);
+export default memo(DataTablesBody);

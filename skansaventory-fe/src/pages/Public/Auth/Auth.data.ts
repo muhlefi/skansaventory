@@ -12,6 +12,11 @@ export interface LoginProps {
     navigate: NavigateFunction
 }
 
+export interface LoginViewProps extends LoginProps {
+    onSubmit: (values: { username: string; password: string }) => void;
+    isLoading: boolean;
+}
+
 export interface ResetPasswordProps {
     setAuthStep: Dispatch<SetStateAction<number>>
 }

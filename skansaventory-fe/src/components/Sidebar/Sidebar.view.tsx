@@ -41,7 +41,7 @@ const SidebarView: FC<SidebarProps> = ({ isOpen }) => {
                     <Link
                         key={id}
                         to={path}
-                        className={`w-full flex items-center gap-4 py-3 px-3 mb-1 text-sm text-white rounded-full ${isActive(path) ? 'bg-white text-slate-900' : 'hover:bg-white hover:text-slate-900'
+                        className={`w-full flex items-center gap-4 py-3 px-3 mb-1 text-sm rounded-full ${isActive(path) ? 'bg-white text-slate-900' : 'hover:bg-white hover:text-slate-900 text-white'
                             } transition duration-200 focus:bg-white focus:text-slate-900`}
                     >
                         {icon}
@@ -52,7 +52,7 @@ const SidebarView: FC<SidebarProps> = ({ isOpen }) => {
                     <Link
                         key={id}
                         to={path}
-                        className={`w-full flex items-center gap-4 py-3 px-3 mb-1 text-sm text-white rounded-full ${isActive(path) ? 'bg-white text-slate-900' : 'hover:bg-white hover:text-slate-900'
+                        className={`w-full flex items-center gap-4 py-3 px-3 mb-1 text-sm rounded-full ${isActive(path) ? 'bg-white text-slate-900' : 'hover:bg-white hover:text-slate-900 text-white'
                             } transition duration-200 focus:bg-white focus:text-slate-900`}
                     >
                         {icon}
@@ -63,7 +63,7 @@ const SidebarView: FC<SidebarProps> = ({ isOpen }) => {
                     <Link
                         key={id}
                         to={path}
-                        className={`w-full flex items-center gap-4 py-3 px-3 mb-1 text-sm text-white rounded-full ${isActive(path) ? 'bg-white text-slate-900' : 'hover:bg-white hover:text-slate-900'
+                        className={`w-full flex items-center gap-4 py-3 px-3 mb-1 text-sm rounded-full ${isActive(path) ? 'bg-white text-slate-900' : 'hover:bg-white hover:text-slate-900 text-white'
                             } transition duration-200 focus:bg-white focus:text-slate-900`}
                     >
                         {icon}

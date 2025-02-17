@@ -3,6 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { privateRoutes, publicRoutes } from "./Navigator.data";
 import HasAuthentication from "../HasAuthentication";
 import HasLayout from "../HasLayout/HasLayout";
+import HasContext from "../HasContext/HasContext";
 
 const Navigator: React.FC = () => {
     const token = localStorage.getItem("token");
@@ -33,9 +34,11 @@ const Navigator: React.FC = () => {
                     {privateRoutes.map((route) => (
                         <Route key={route.path} path={route.path} element={
                             <HasAuthentication>
-                                <HasLayout type="Private">
-                                    {route.element}
-                                </HasLayout>
+                                <HasContext>
+                                    <HasLayout type="Private">
+                                        {route.element}
+                                    </HasLayout>
+                                </HasContext>
                             </HasAuthentication>
                         } />
                     ))}

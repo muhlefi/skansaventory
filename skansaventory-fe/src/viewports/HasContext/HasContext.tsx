@@ -1,12 +1,16 @@
-import reduxStore from "@/init/reduxStore/reduxStore";
-import { HasReduxStoreProps } from "./HasReduxStore.type";
-import { Provider as ReduxProvider } from 'react-redux';
-import { memo } from "react";
+import { FC, memo } from "react";
+import { HasContextProps } from "./HasContext.type";
+import DataTablesContextProvider from "../../dataservices/datatables/context";
+import AuthContextProvider from "../../dataservices/jwt/context";
 
-const HasReduxStore: React.FC<HasReduxStoreProps> = ({ children }) => (
-    <ReduxProvider store={reduxStore}>
-        {children}
-    </ReduxProvider>
-);
+const HasContext: FC<HasContextProps> = ({ children }) => {
+    return (
+        <AuthContextProvider>
+            <DataTablesContextProvider>
+                {children}
+            </DataTablesContextProvider>
+        </AuthContextProvider>
+    )
+};
 
-export default memo(HasReduxStore);
+export default memo(HasContext);
