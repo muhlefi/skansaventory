@@ -29,6 +29,16 @@ export interface PetugasDrawerViewProps {
     visibleButton: boolean;
 }
 
+export interface LevelListViewProps {
+    openLevelList: boolean;
+    setOpenLevelList: Dispatch<SetStateAction<boolean>>;
+}
+
+export interface FeaturesListViewProps {
+    openFeaturesList: boolean;
+    setOpenFeaturesList: Dispatch<SetStateAction<boolean>>;
+}
+
 export const petugasSchema = Yup.object().shape({
     nama: Yup.string().required('Nama is required'),
     username: Yup.string().required('Username is required').min(8, 'Username minimal 8 character'),
@@ -48,3 +58,18 @@ interface Petugas {
     updated_at: Date;
     deleted_at: Date | null;
 }
+
+export const featuresList = [
+    { name: "Login", admin: true, operator: true, peminjam: true },
+    { name: "Logout", admin: true, operator: true, peminjam: true },
+    { name: "Inventarisir", admin: true, operator: false, peminjam: false },
+    { name: "Peminjaman", admin: true, operator: true, peminjam: true },
+    { name: "Pengembalian", admin: false, operator: true, peminjam: true },
+    { name: "Generate laporan", admin: true, operator: false, peminjam: false },
+];
+
+export const levelList = [
+    { id: 1, name: 'Superadmin', badgeClass: 'badge-primary' },
+    { id: 2, name: 'Operator', badgeClass: 'badge-warning' },
+    { id: 3, name: 'Staff', badgeClass: 'badge-secondary' },
+];
