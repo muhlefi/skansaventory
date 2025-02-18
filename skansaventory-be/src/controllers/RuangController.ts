@@ -11,10 +11,21 @@ export const getAllRuang = async (c: Context) => {
     try {
         const page = parseInt(c.req.query('page') || '1', 10)
         const perPage = parseInt(c.req.query('perPage') || '10', 10)
+        const search = c.req.query('search') || ''
 
         const result = await handlePaginate(
             prisma.ruang,
-            { deleted_at: null },
+            {
+                deleted_at: null,
+                OR: [
+                    {
+                        nama_ruang: { contains: search },
+                    },
+                    {
+                        kode_ruang: { contains: search },
+                    },
+                ],
+            },
             page,
             perPage
         )
@@ -48,15 +59,15 @@ export const showRuangById = async (c: Context) => {
 
 export async function createRuang(c: Context) {
     try {
-        const body = await c.req.parseBody();
+        const body = await c.req.json();
         const rules = z.object({
             nama: z.string().min(1),
-            kode: z.string().min(1).regex(/^[^\s]+$/, { message: 'Kode tidak boleh mengandung spasi' }),
+            kode: z.string().min(1).regex(/^[^\s]+$/, { message: 'Code must not contain spaces' }),
             keterangan: z.string().optional()
         }).parse(body);
 
         if (await prisma.ruang.findFirst({ where: { kode_ruang: rules.kode, deleted_at: null } })) {
-            return baseResponse.error(c, 'Kode Ruang sudah digunakan.');
+            return baseResponse.error(c, 'Ruang code is already in use.');
         }
 
         const Ruang = await prisma.ruang.create({
@@ -83,15 +94,15 @@ export async function createRuang(c: Context) {
 export async function updateRuang(c: Context) {
     try {
         const id = parseInt(c.req.param('id'));
-        const body = await c.req.parseBody();
+        const body = await c.req.json();
         const rules = z.object({
             nama: z.string().min(1),
-            kode: z.string().min(1).regex(/^[^\s]+$/, { message: 'Kode tidak boleh mengandung spasi' }),
+            kode: z.string().min(1).regex(/^[^\s]+$/, { message: 'Code must not contain spaces' }),
             keterangan: z.string().optional()
         }).parse(body);
 
         if (await prisma.ruang.findFirst({ where: { kode_ruang: rules.kode, id_ruang: { not: id }, deleted_at: null } })) {
-            return baseResponse.error(c, 'Kode Ruang sudah digunakan.');
+            return baseResponse.error(c, 'Ruang code is already in use.');
         }
 
         const Ruang = await prisma.ruang.update({

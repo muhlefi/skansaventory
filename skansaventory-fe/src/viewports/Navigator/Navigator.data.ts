@@ -20,7 +20,7 @@ export const privateRoutes: Route[] = [
         label: 'Ruang',
         path: '/master/ruang',
         element: createElement(lazy(
-            async () => await import('../../pages/Private/Jenis')
+            async () => await import('../../pages/Private/Ruang')
         ))
     },
     {
