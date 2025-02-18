@@ -21,7 +21,7 @@ const PrivateLayoutView: FC<PrivateLayoutViewProps> = ({ children, isSidebarOpen
 
             {/* Content */}
             <div className={`flex-1 transition-all ${isSidebarOpen ? "ml-64" : "ml-16"} mt-[5rem] min-h-screen`}>
-                <div className="pt-8 pb-12 pl-12">
+                <div className="pt-6 pb-12 pl-12">
                     {children}
                 </div>
                 <span className="absolute bottom-4 ml-12 text-sm font-light z-10">

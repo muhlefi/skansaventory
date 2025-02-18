@@ -1,7 +1,7 @@
 interface PaginateResult<T> {
     page: number;
     perPage: number;
-    totalItems: number;
+    totalData: number;
     totalPages: number;
     items: T[];
 }
@@ -15,7 +15,7 @@ export const handlePaginate = async <T>(
     const skip = (page - 1) * perPage;
     const take = perPage;
 
-    const [items, totalItems] = await Promise.all([
+    const [items, totalData] = await Promise.all([
         model.findMany({
             where,
             skip,
@@ -25,12 +25,12 @@ export const handlePaginate = async <T>(
         model.count({ where }),
     ]);
 
-    const totalPages = Math.ceil(totalItems / perPage);
+    const totalPages = Math.ceil(totalData / perPage);
 
     return {
         page,
         perPage,
-        totalItems,
+        totalData,
         totalPages,
         items,
     };

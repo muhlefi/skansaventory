@@ -1,5 +1,6 @@
-import { ReactNode } from "react";
-
 export interface AuthContextProps {
-    children: ReactNode
-}
+    isAuthenticated: boolean;
+    verifyToken: any;
+    verifyTokenRefetch: () => void;
+  }
+  

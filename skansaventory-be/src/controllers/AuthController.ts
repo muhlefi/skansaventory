@@ -21,7 +21,7 @@ export const login = async (c: Context) => {
   });
 
   if (!user || !(await bcrypt.compare(password, user.password))) {
-    return c.json({ error: "Invalid credentials" }, 401);
+    return c.json({ error: "Invalid credentials" }, 400);
   }
 
   const accessToken = await new SignJWT({

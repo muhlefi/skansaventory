@@ -24,7 +24,6 @@ const Login: FC<LoginProps> = ({ setAuthStep }) => {
 
     return <LoginView 
         setAuthStep={setAuthStep} 
-        navigate={navigate} 
         onSubmit={loginMutation.mutate} 
         isLoading={loginMutation.isPending} 
     />;

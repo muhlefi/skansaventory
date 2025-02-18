@@ -8,10 +8,21 @@ export const getAllJenis = async (c: Context) => {
     try {
         const page = parseInt(c.req.query('page') || '1', 10)
         const perPage = parseInt(c.req.query('perPage') || '10', 10)
+        const search = c.req.query('search') || '' 
 
         const result = await handlePaginate(
             prisma.jenis,
-            { deleted_at: null },
+            {
+                deleted_at: null,
+                OR: [
+                    {
+                        nama_jenis: { contains: search },
+                    },
+                    {
+                        kode_jenis: { contains: search },
+                    },
+                ],
+            },
             page,
             perPage
         )
@@ -45,15 +56,15 @@ export const showJenisById = async (c: Context) => {
 
 export async function createJenis(c: Context) {
     try {
-        const body = await c.req.parseBody();
+        const body = await c.req.json();
         const rules = z.object({
             nama: z.string().min(1),
-            kode: z.string().min(1).regex(/^[^\s]+$/, { message: 'Kode tidak boleh mengandung spasi' }),
+            kode: z.string().min(1).regex(/^[^\s]+$/, { message: 'Code should not contain space' }),
             keterangan: z.string().optional()
         }).parse(body);
 
         if (await prisma.jenis.findFirst({ where: { kode_jenis: rules.kode, deleted_at: null } })) {
-            return baseResponse.error(c, 'Kode jenis sudah digunakan.');
+            return baseResponse.error(c, 'Jenis code is already used.');
         }
 
         const jenis = await prisma.jenis.create({
@@ -80,7 +91,7 @@ export async function createJenis(c: Context) {
 export async function updateJenis(c: Context) {
     try {
         const id = parseInt(c.req.param('id'));
-        const body = await c.req.parseBody();
+        const body = await c.req.json();
         const rules = z.object({
             nama: z.string().min(1),
             kode: z.string().min(1).regex(/^[^\s]+$/, { message: 'Kode tidak boleh mengandung spasi' }),

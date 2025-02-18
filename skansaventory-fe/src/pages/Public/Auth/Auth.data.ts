@@ -1,5 +1,4 @@
 import { Dispatch, SetStateAction } from "react";
-import { NavigateFunction } from "react-router-dom";
 import * as Yup from 'yup'	
 
 export interface AuthProps {
@@ -9,7 +8,6 @@ export interface AuthProps {
 
 export interface LoginProps {
     setAuthStep: Dispatch<SetStateAction<number>>
-    navigate: NavigateFunction
 }
 
 export interface LoginViewProps extends LoginProps {

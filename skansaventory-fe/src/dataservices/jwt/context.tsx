@@ -1,14 +1,10 @@
 import { FC, ReactNode, createContext, useEffect, useState } from "react";
 import authApi from "./api";
 import { useQuery } from "@tanstack/react-query";
-
-interface AuthContextProps {
-  isAuthenticated: boolean;
-  verifyToken: any;
-  verifyTokenRefetch: () => void;
-}
+import { AuthContextProps } from "./type";
 
 export const AuthContext = createContext<AuthContextProps | undefined>(undefined);
+
 const AuthContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
@@ -16,7 +12,6 @@ const AuthContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
     queryKey: ["verifyToken"],
     queryFn: async () => {
       const response = await authApi.verifyToken();
-      console.log("✅ Response dari verifyToken:", response);
       return response;
     },
     enabled: false,
@@ -24,14 +19,12 @@ const AuthContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   useEffect(() => {
     if (verifyToken) {
-      console.log("✅ Data verifikasi token berhasil:", verifyToken);
       setIsAuthenticated(true);
     }
   }, [verifyToken]);
 
   useEffect(() => {
     if (isError) {
-      console.error("❌ Error verifikasi token:", error);
       setIsAuthenticated(false);
       localStorage.removeItem("token");
     }

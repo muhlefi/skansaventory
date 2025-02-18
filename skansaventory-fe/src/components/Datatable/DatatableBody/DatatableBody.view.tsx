@@ -3,8 +3,8 @@ import { DataTableBodyProps } from "../Datatable.data";
 
 
 const DatatableBodyView: FC<DataTableBodyProps> = ({ renderTableHeader, renderTableBody }) => (
-    <div className="overflow-x-auto z-50">
-        <table className="table">
+    <div className="overflow-x-auto">
+        <table className="table overflow-auto">
             <thead>
                 {renderTableHeader()}
             </thead>
