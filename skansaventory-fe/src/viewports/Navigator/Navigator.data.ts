@@ -53,7 +53,7 @@ export const privateRoutes: Route[] = [
         label: 'Users',
         path: '/settings/users',
         element: createElement(lazy(
-            async () => await import('../../pages/Private/Jenis')
+            async () => await import('../../pages/Private/Users')
         ))
     },
     {

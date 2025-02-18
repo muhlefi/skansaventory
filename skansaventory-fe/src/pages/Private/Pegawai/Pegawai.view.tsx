@@ -14,9 +14,9 @@ const PegawaiListView: FC<PegawaiListProps> = ({ pegawai, pegawaiLoading, pegawa
         renderTableHeader={() => (
             <tr className="text-slate-900 text-sm">
                 <th className="w-[10%]">No</th>
-                <th className="w-[30%]">Name</th>
-                <th className="w-[15%]">NIP</th>
-                <th className="w-[35%]">Address</th>
+                <th className="w-[25%]">Name</th>
+                <th className="w-[25%]">NIP</th>
+                <th className="w-[30%]">Address</th>
                 <th className="w-[10%]">Action</th>
             </tr>
         )}

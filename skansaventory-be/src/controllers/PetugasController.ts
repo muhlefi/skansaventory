@@ -9,10 +9,21 @@ export const getAllPetugas = async (c: Context) => {
     try {
         const page = parseInt(c.req.query('page') || '1', 10)
         const perPage = parseInt(c.req.query('perPage') || '10', 10)
+        const search = c.req.query('search') || ''
 
         const result = await handlePaginate(
             prisma.petugas,
-            { deleted_at: null },
+            {
+                deleted_at: null,
+                OR: [
+                    {
+                        nama_petugas: { contains: search },
+                    },
+                    {
+                        username: { contains: search },
+                    },
+                ],
+            },
             page,
             perPage
         )
@@ -31,9 +42,6 @@ export const showPetugasById = async (c: Context) => {
                 id_petugas: Number(id),
                 deleted_at: null
             },
-            select: {
-                password: false
-            }
         });
 
         if (!petugas) {
@@ -100,7 +108,7 @@ export async function updatePetugas(c: Context) {
             id_pegawai: z.number().min(1)
         }).parse(body);
 
-        if (await prisma.petugas.findFirst({ where: { nama_petugas: rules.nama, username: rules.username, deleted_at: null } })) {
+        if (await prisma.petugas.findFirst({ where: { nama_petugas: rules.nama, username: rules.username, deleted_at: null, id_petugas: { not: id } } })) {
             return baseResponse.error(c, 'Name or username is already in use.');
         }
 

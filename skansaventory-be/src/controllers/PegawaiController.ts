@@ -8,10 +8,24 @@ export const getAllPegawai = async (c: Context) => {
     try {
         const page = parseInt(c.req.query('page') || '1', 10)
         const perPage = parseInt(c.req.query('perPage') || '10', 10)
+        const search = c.req.query('search') || ''
 
         const result = await handlePaginate(
             prisma.pegawai,
-            { deleted_at: null },
+            {
+                deleted_at: null,
+                OR: [
+                    {
+                        nama_pegawai: { contains: search },
+                    },
+                    {
+                        nip: { contains: search },
+                    },
+                    {
+                        alamat: { contains: search },
+                    }
+                ],
+            },
             page,
             perPage
         )
