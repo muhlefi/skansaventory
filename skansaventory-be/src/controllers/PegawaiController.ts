@@ -45,16 +45,15 @@ export const showPegawaiById = async (c: Context) => {
 
 export async function createPegawai(c: Context) {
     try {
-        const body = await c.req.parseBody();
+        const body = await c.req.json();
         const rules = z.object({
             nama: z.string().min(1),
-            nip: z.string().min(18).max(18),
+            nip: z.string().min(18),
             alamat: z.string().min(1),
-            id_pegawai: z.number().min(1)
         }).parse(body);
 
         if (await prisma.pegawai.findFirst({ where: { nama_pegawai: rules.nama, nip: rules.nip, deleted_at: null } })) {
-            return baseResponse.error(c, 'nama atau nip sudah digunakan.');
+            return baseResponse.error(c, 'Name or NIP is already in use.');
         }
 
         const result = await prisma.pegawai.create({
@@ -62,7 +61,6 @@ export async function createPegawai(c: Context) {
                 nama_pegawai: rules.nama,
                 nip: rules.nip,
                 alamat: rules.alamat,
-                id_pegawai: rules.id_pegawai,
                 created_at: new Date(),
                 updated_at: new Date(),
             }
@@ -82,16 +80,15 @@ export async function createPegawai(c: Context) {
 export async function updatePegawai(c: Context) {
     try {
         const id = parseInt(c.req.param('id'));
-        const body = await c.req.parseBody();
+        const body = await c.req.json();
         const rules = z.object({
             nama: z.string().min(1),
-            nip: z.string().min(18).max(18),
+            nip: z.string().min(18),
             alamat: z.string().min(1),
-            id_pegawai: z.number().min(1)
         }).parse(body);
 
-        if (await prisma.pegawai.findFirst({ where: { nama_pegawai: rules.nama, nip: rules.nip, deleted_at: null } })) {
-            return baseResponse.error(c, 'nama atau nip sudah digunakan.');
+        if (await prisma.pegawai.findFirst({ where: { nama_pegawai: rules.nama, nip: rules.nip, deleted_at: null, id_pegawai: { not: id } } })) {
+            return baseResponse.error(c, 'Name or NIP is already in use.');
         }
 
         const result = await prisma.pegawai.update({
@@ -100,7 +97,7 @@ export async function updatePegawai(c: Context) {
                 nama_pegawai: rules.nama,
                 nip: rules.nip,
                 alamat: rules.alamat,
-                id_pegawai: rules.id_pegawai,
+                id_pegawai: id,
                 created_at: new Date(),
                 updated_at: new Date(),
             }

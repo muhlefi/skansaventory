@@ -94,12 +94,12 @@ export async function updateJenis(c: Context) {
         const body = await c.req.json();
         const rules = z.object({
             nama: z.string().min(1),
-            kode: z.string().min(1).regex(/^[^\s]+$/, { message: 'Kode tidak boleh mengandung spasi' }),
+            kode: z.string().min(1).regex(/^[^\s]+$/, { message: 'Code should not contain space' }),
             keterangan: z.string().optional()
         }).parse(body);
 
         if (await prisma.jenis.findFirst({ where: { kode_jenis: rules.kode, id_jenis: { not: id }, deleted_at: null } })) {
-            return baseResponse.error(c, 'Kode jenis sudah digunakan.');
+            return baseResponse.error(c, 'Jenis code is already used.');
         }
 
         const jenis = await prisma.jenis.update({

@@ -60,7 +60,7 @@ export const privateRoutes: Route[] = [
         label: 'Pegawai',
         path: '/settings/pegawai',
         element: createElement(lazy(
-            async () => await import('../../pages/Private/Jenis')
+            async () => await import('../../pages/Private/Pegawai')
         ))
     },
 ];
