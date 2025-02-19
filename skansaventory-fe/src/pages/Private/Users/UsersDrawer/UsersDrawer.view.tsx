@@ -7,7 +7,7 @@ import { PetugasDrawerViewProps, petugasSchema } from "../Users.data";
 const PetugasDrawerView: FC<PetugasDrawerViewProps> = ({ createPetugasMutation, action, updatePetugasMutation, petugasById, handleCloseDrawer, visibleButton, comboboxLevel, comboboxPegawai }) => (
     <Drawer
         id={action === 'add' ? "add-petugas" : "edit-petugas"}
-        title={action === 'add' ? "Add Petugas" : "Edit Petugas"}
+        title={action === 'add' ? "Add User" : "Edit User"}
         handleCloseDrawer={handleCloseDrawer}
         renderButtonDrawer={() => (
             <label
@@ -16,7 +16,7 @@ const PetugasDrawerView: FC<PetugasDrawerViewProps> = ({ createPetugasMutation, 
             >
                 <div className="flex items-center gap-1">
                     {action === 'add' ? <Plus width={15} /> : <Edit width={15} />}
-                    <span>{action === 'add' ? 'Add New Petugas' : 'Edit Petugas'}</span>
+                    <span>{action === 'add' ? 'Add New User' : 'Edit User'}</span>
                 </div>
             </label>
         )}

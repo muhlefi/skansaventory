@@ -10,7 +10,7 @@ const DrawerView: FC<DrawerProps> = ({ id, title, children, renderButtonDrawer, 
     </div>
     <div className="drawer-side mt-20 z-10">
       <label className="drawer-overlay !cursor-default"></label>
-      <div className="menu bg-white text-base-content min-h-full w-80 py-5 px-6">
+      <div className="menu bg-white text-base-content min-h-full w-80 py-5 px-6 pb-24">
         <div className="flex justify-between">
           <h3 className="font-bold text-lg mb-4">{title}</h3>
           <button className="btn btn-sm btn-square btn-ghost hover:bg-transparent" onClick={handleCloseDrawer}>

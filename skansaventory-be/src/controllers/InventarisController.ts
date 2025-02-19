@@ -2,25 +2,27 @@ import { Context } from 'hono'
 import { z } from 'zod';
 import prisma from "../../prisma/client";
 import { baseResponse } from '../helpers/BaseResponse';
-import { handlePaginate } from '../helpers/HandlePaginate';
+import { handlePaginateRaw } from '../helpers/HandlePaginateRaw';
 
 export const getAllInventaris = async (c: Context) => {
     try {
-        const page = parseInt(c.req.query('page') || '1', 10)
-        const perPage = parseInt(c.req.query('perPage') || '10', 10)
+        const page = parseInt(c.req.query('page') || '1', 10);
+        const perPage = parseInt(c.req.query('perPage') || '10', 10);
+        const search = c.req.query('search') || '';
 
-        const result = await handlePaginate(
-            prisma.inventaris,
-            { deleted_at: null },
+        const result = await handlePaginateRaw(
+            'v_inventaris',
+            ['nama', 'kode_inventaris', 'nama_jenis', 'nama_ruang'],
+            search,
             page,
             perPage
-        )
+        );
 
-        return baseResponse.success(c, result)
+        return baseResponse.success(c, result);
     } catch (e: unknown) {
-        return baseResponse.error(c, `Error: ${e instanceof Error ? e.message : 'Unknown error'}`)
+        return baseResponse.error(c, `Error: ${e instanceof Error ? e.message : 'Unknown error'}`);
     }
-}
+};
 
 export const showInventarisById = async (c: Context) => {
     try {
@@ -48,7 +50,7 @@ export async function createInventaris(c: Context) {
         const body = await c.req.json();
         const rules = z.object({
             nama: z.string().min(1),
-            kode: z.string().min(1).regex(/^[^\s]+$/, { message: 'Kode tidak boleh mengandung spasi' }),
+            kode: z.string().min(1).regex(/^[^\s]+$/, { message: 'Code must not contain spaces' }),
             jumlah: z.number().min(1),
             kondisi: z.string().min(1),
             id_petugas: z.number().min(1),
@@ -56,8 +58,8 @@ export async function createInventaris(c: Context) {
             id_ruang: z.number().min(1),
         }).parse(body);
 
-        if (await prisma.inventaris.findFirst({ where: { nama:rules.nama, kode_inventaris:rules.kode, deleted_at: null } })) {
-            return baseResponse.error(c, 'kode atau nama sudah digunakan.');
+        if (await prisma.inventaris.findFirst({ where: { nama: rules.nama, kode_inventaris: rules.kode, deleted_at: null } })) {
+            return baseResponse.error(c, 'Code or name is already in use.');
         }
 
         const result = await prisma.inventaris.create({
@@ -92,7 +94,7 @@ export async function updateInventaris(c: Context) {
         const body = await c.req.json();
         const rules = z.object({
             nama: z.string().min(1),
-            kode: z.string().min(1).regex(/^[^\s]+$/, { message: 'Kode tidak boleh mengandung spasi' }),
+            kode: z.string().min(1).regex(/^[^\s]+$/, { message: 'Code must not contain spaces' }),
             jumlah: z.number().min(1),
             kondisi: z.string().min(1),
             keterangan: z.string().optional(),
@@ -101,8 +103,8 @@ export async function updateInventaris(c: Context) {
             id_ruang: z.number().min(1),
         }).parse(body);
 
-        if (await prisma.inventaris.findFirst({ where: { nama:rules.nama, id_jenis: { not: id }, kode_inventaris:rules.kode, deleted_at: null } })) {
-            return baseResponse.error(c, 'kode atau nama sudah digunakan.');
+        if (await prisma.inventaris.findFirst({ where: { nama: rules.nama, id_jenis: { not: id }, kode_inventaris: rules.kode, deleted_at: null, id_inventaris: { not: id } } })) {
+            return baseResponse.error(c, 'Code or name is already in use.');
         }
 
         const result = await prisma.inventaris.update({
@@ -171,4 +173,4 @@ export async function getCombobox(c: Context) {
     } catch (e: unknown) {
         return baseResponse.error(c, `Error: ${e instanceof Error ? e.message : 'Unknown error'}`);
     }
-} 
+}

@@ -27,7 +27,7 @@ export const privateRoutes: Route[] = [
         label: 'Inventaris',
         path: '/master/inventaris',
         element: createElement(lazy(
-            async () => await import('../../pages/Private/Jenis')
+            async () => await import('../../pages/Private/Inventaris')
         ))
     },
     {
