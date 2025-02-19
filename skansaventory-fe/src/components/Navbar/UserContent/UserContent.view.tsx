@@ -17,7 +17,7 @@ const UserContentView: FC<UserContentProps> = ({ onLogout, user }) => {
                     </div>
                     <div className="felx flex-col">
                         <div className="font-bold text-base">{user?.name}</div>
-                        <div className="text-sm">{user?.role === "SA" ? "Superadmin" : user?.role}</div>
+                        <div className="text-sm">{user?.role === "OP" ? "Operator" : user?.role === "SF" ? "Staff" : user?.role}</div>
                     </div>
                 </div>
                 <button
