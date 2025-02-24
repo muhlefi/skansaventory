@@ -175,7 +175,7 @@ export async function getCombobox(c: Context) {
             SELECT i.id_inventaris, i.nama, i.kode_inventaris, i.jumlah_tersedia, i.kondisi, r.id_ruang, r.nama_ruang
             FROM inventaris i
             JOIN ruang r ON i.id_ruang = r.id_ruang
-            WHERE i.deleted_at IS NULL AND i.jumlah_tersedia > 0 AND i.kondisi NOT IN ('2', '3')
+            WHERE i.deleted_at IS NULL AND i.jumlah_tersedia > 0
             ORDER BY i.id_inventaris DESC
         `;
 

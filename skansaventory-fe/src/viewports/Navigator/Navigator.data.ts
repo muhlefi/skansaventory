@@ -89,14 +89,14 @@ export const privateRoutes: Route[] = [
         label: 'Verval Denda',
         path: '/main-menu/verval-denda',
         element: createElement(lazy(
-            async () => await import('../../pages/Private/Pegawai')
+            async () => await import('../../pages/Private/Denda')
         ))
     },
     {
         label: 'Denda',
         path: '/main-menu/denda',
         element: createElement(lazy(
-            async () => await import('../../pages/Private/Pegawai')
+            async () => await import('../../pages/Private/Denda')
         ))
     },
 ];

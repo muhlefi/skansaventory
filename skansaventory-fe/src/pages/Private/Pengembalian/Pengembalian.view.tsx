@@ -1,5 +1,5 @@
 import { FC, Fragment, memo, useState } from "react";
-import { CheckCircle, ChevronDown, ChevronUp, Ellipsis, FileText, Undo2 } from "lucide-react";
+import { CheckCircle, ChevronDown, ChevronUp, Ellipsis, FileText } from "lucide-react";
 import Datatable from "../../../components/Datatable";
 import { PeminjamanListViewProps } from "./Pengembalian.data";
 
@@ -23,7 +23,7 @@ const PengembalianView: FC<PeminjamanListViewProps> = ({ peminjaman, peminjamanL
                     <th>Borrow Date</th>
                     <th>Return Date</th>
                     <th>Borrow Status</th>
-                    <th>Action</th>
+                    <th>Actions</th>
                     <th></th>
                 </tr>
             )}
@@ -72,17 +72,20 @@ const PengembalianView: FC<PeminjamanListViewProps> = ({ peminjaman, peminjamanL
                                                     >
                                                         <div className="flex items-center gap-2">
                                                             <CheckCircle width={20} />
-                                                            Approve Pengembalian
+                                                            Check Pengembalian
                                                         </div>
                                                     </button>
-                                                    <div className="border-t" />
+                                                </>
+                                            ) : null}
+                                            {item.status_peminjaman === '' ? (
+                                                <>
                                                     <button
-                                                        className="btn-ghost flex gap-2 text-red-600 hover:bg-red-600 hover:text-white w-full p-1 rounded-3xl font-semibold text-left"
+                                                        className="btn-ghost flex gap-2 text-green-600 hover:bg-green-600 hover:text-white w-full p-1 rounded-3xl font-semibold text-left"
                                                         onClick={() => openReturnModal(item.id_peminjaman)}
                                                     >
                                                         <div className="flex items-center gap-2">
-                                                            <Undo2 width={20} />
-                                                            Reject Pengembalian
+                                                            <CheckCircle width={20} />
+                                                            Check Pengembalian
                                                         </div>
                                                     </button>
                                                 </>
@@ -117,8 +120,8 @@ const PengembalianView: FC<PeminjamanListViewProps> = ({ peminjaman, peminjamanL
                                                 <div className="flex gap-2">
                                                     <span className="font-semibold flex items-center gap-2">
                                                         Condition:
-                                                        <p className={`badge badge-sm text-white ${detail.inventaris.kondisi === "1" ? 'bg-success' : detail.inventaris.kondisi === "2" ? 'bg-secondary' : 'bg-red-400'}`}>
-                                                            {detail.inventaris.kondisi === "1" ? 'Good' : detail.inventaris.kondisi === "2" ? 'Damaged' : 'Lost'}
+                                                        <p className={`badge badge-sm text-white ${['4', '7', '8'].includes(item.status_peminjaman) ? (detail.kondisi_sesudah === 1 ? 'bg-success' : detail.kondisi_sesudah === 2 ? 'bg-secondary' : 'bg-red-400') : (detail.kondisi_sebelum === 1 ? 'bg-success' : detail.kondisi_sebelum === 2 ? 'bg-secondary' : 'bg-red-400')}`}>
+                                                            {['4', '7', '8'].includes(item.status_peminjaman) ? (detail.kondisi_sesudah === 1 ? 'Good' : detail.kondisi_sesudah === 2 ? 'Damaged' : 'Lost') : (detail.kondisi_sebelum === 1 ? 'Good' : detail.kondisi_sebelum === 2 ? 'Damaged' : 'Lost')}
                                                         </p>
                                                     </span>
                                                 </div>

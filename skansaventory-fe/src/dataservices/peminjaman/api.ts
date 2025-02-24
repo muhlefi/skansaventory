@@ -25,6 +25,8 @@ const peminjamanApi = {
     handleRequest(
       apiInstance.put(`/peminjaman/verval/${id}`, data)
     ),
+
+  checkIsOverdue: () => handleRequest(apiInstance.get(`/peminjaman/check-overdue`)),
 };
 
 export default peminjamanApi;

@@ -23,7 +23,7 @@ const PetugasListView: FC<PetugasListProps> = ({ petugas, petugasLoading, petuga
                         <th className="w-[30%]">Name</th>
                         <th className="w-[30%]">Username</th>
                         <th className="w-[20%]">Level</th>
-                        <th className="w-[10%]">Action</th>
+                        <th className="w-[10%]">Actions</th>
                     </tr>
                 )}
                 renderTableBody={() => (

@@ -199,8 +199,8 @@ const FormPeminjamanView: FC<FormPeminjamanViewProps> = ({ pegawaiId, comboboxIn
                                 </FieldArray>
                             </div>
                         </div>
-                        <div className="flex border-t p-6 justify-between">
-                        <button type="button" className="btn btn-sm btn-outline border-red-600 text-red-600 hover:bg-red-600 hover:border-red-600 rounded-full w-full md:w-fit px-6" onClick={openCancelModal}>
+                        <div className="flex flex-col md:flex-row border-t p-6 md:justify-between">
+                            <button type="button" className="btn btn-sm btn-outline border-red-600 text-red-600 hover:bg-red-600 hover:border-red-600 rounded-full w-full md:w-fit px-6 mb-2 md:mb-0 md:mr-4" onClick={openCancelModal}>
                                 Cancel Peminjaman
                             </button>
                             <button type="submit" className="btn btn-sm bg-slate-900 text-white rounded-full w-full md:w-fit px-6">

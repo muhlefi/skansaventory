@@ -17,7 +17,7 @@ const RuangListView: FC<RuangListProps> = ({ ruang, ruangLoading, ruangRefetch, 
                 <th className="w-[30%]">Name</th>
                 <th className="w-[15%]">Kode</th>
                 <th className="w-[35%]">Description</th>
-                <th className="w-[10%]">Action</th>
+                <th className="w-[10%]">Actions</th>
             </tr>
         )}
         renderTableBody={() => (

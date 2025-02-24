@@ -111,9 +111,8 @@ const inventarisDrawerView: FC<InventarisDrawerViewProps> = ({ createInventarisM
                             </label>
                             <Field as="select" name="kondisi" className="select select-sm select-bordered w-full rounded-full border-slate-900">
                                 <option value="">Select Condition</option>
-                                <option value="1">Good</option>
-                                <option value="2">Damaged</option>
-                                <option value="3">Lost</option>
+                                <option value="1">New</option>
+                                <option value="2">Second</option>
                             </Field>
                             <ErrorMessage name="kondisi" component="div" className="text-red-600 text-xs mt-1" />
                         </div>

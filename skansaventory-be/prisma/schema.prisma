@@ -51,6 +51,8 @@ model Inventaris {
   jumlah           Int
   jumlah_tersedia  Int
   jumlah_dipinjam  Int
+  jumlah_rusak     Int       @default(0)
+  harga_per_unit   Int       @default(0)
   id_jenis         Int
   id_ruang         Int
   id_petugas       Int
@@ -105,6 +107,7 @@ model Peminjaman {
 
   pegawai       Pegawai        @relation(fields: [id_pegawai], references: [id_pegawai])
   detail_pinjam DetailPinjam[]
+  denda         Denda[]
 
   created_at DateTime  @default(now())
   updated_at DateTime  @updatedAt
@@ -118,6 +121,10 @@ model DetailPinjam {
   id_inventaris    Int
   id_peminjaman    Int
   jumlah           Int
+  kondisi_sebelum  Int @default(0)
+  kondisi_sesudah  Int @default(0)
+  jumlah_sesudah   Int @default(0)
+  jumlah_rusak     Int @default(0)
 
   inventaris Inventaris @relation(fields: [id_inventaris], references: [id_inventaris])
   peminjaman Peminjaman @relation(fields: [id_peminjaman], references: [id_peminjaman])
@@ -129,6 +136,23 @@ model DetailPinjam {
   @@map("detail_pinjam")
 }
 
+model Denda {
+  id_denda      Int       @id @default(autoincrement())
+  id_peminjaman Int       @unique
+  keterlambatan Int
+  jumlah_denda  Int
+  tanggal_denda DateTime?
+  status        Int       @default(0)
+
+  peminjaman Peminjaman @relation(fields: [id_peminjaman], references: [id_peminjaman])
+
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?
+
+  @@map("denda")
+}
+
 model Pegawai {
   id_pegawai   Int     @id @default(autoincrement())
   nama_pegawai String
@@ -136,7 +160,7 @@ model Pegawai {
   alamat       String?
 
   peminjaman Peminjaman[]
-  petugas Petugas[]
+  petugas    Petugas[]
 
   created_at DateTime  @default(now())
   updated_at DateTime  @updatedAt

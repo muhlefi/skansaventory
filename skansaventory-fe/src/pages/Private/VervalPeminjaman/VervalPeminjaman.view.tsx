@@ -23,7 +23,7 @@ const VervalPeminjamanView: FC<PeminjamanListViewProps> = ({ peminjaman, peminja
                     <th>Borrow Date</th>
                     <th>Return Date</th>
                     <th>Borrow Status</th>
-                    <th>Action</th>
+                    <th>Actions</th>
                     <th></th>
                 </tr>
             )}
@@ -84,8 +84,8 @@ const VervalPeminjamanView: FC<PeminjamanListViewProps> = ({ peminjaman, peminja
                                                 <div className="flex gap-2">
                                                     <span className="font-semibold flex items-center gap-2">
                                                         Condition:
-                                                        <p className={`badge badge-sm text-white ${detail.inventaris.kondisi === "1" ? 'bg-success' : detail.inventaris.kondisi === "2" ? 'bg-secondary' : 'bg-red-400'}`}>
-                                                            {detail.inventaris.kondisi === "1" ? 'Good' : detail.inventaris.kondisi === "2" ? 'Damaged' : 'Lost'}
+                                                        <p className={`badge badge-sm text-white ${['4', '7', '8'].includes(item.status_peminjaman) ? (detail.kondisi_sesudah === 1 ? 'bg-success' : detail.kondisi_sesudah === 2 ? 'bg-secondary' : 'bg-red-400') : (detail.kondisi_sebelum === 1 ? 'bg-success' : detail.kondisi_sebelum === 2 ? 'bg-secondary' : 'bg-red-400')}`}>
+                                                            {['4', '7', '8'].includes(item.status_peminjaman) ? (detail.kondisi_sesudah === 1 ? 'Good' : detail.kondisi_sesudah === 2 ? 'Damaged' : 'Lost') : (detail.kondisi_sebelum === 1 ? 'Good' : detail.kondisi_sebelum === 2 ? 'Damaged' : 'Lost')}
                                                         </p>
                                                     </span>
                                                 </div>

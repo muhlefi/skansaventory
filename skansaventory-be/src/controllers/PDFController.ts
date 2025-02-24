@@ -442,7 +442,7 @@ export const generateBuktiPeminjamanPDF = async (c: Context) => {
                             <td>${item.inventaris.nama}</td>
                             <td>${item.inventaris.kode_inventaris}</td>
                             <td style="text-align: center">${item.jumlah}</td>
-                            <td>${item.inventaris.kondisi === "1" ? "Baik" : item.inventaris.kondisi === "2" ? "Rusak" : "Hilang"}</td>
+                            <td>${item.kondisi_sebelum === 1 ? "Baik" : item.kondisi_sebelum === 2  ? "Rusak" : "Hilang"}</td>
                             <td>${item.inventaris.ruang.nama_ruang}</td>
                         </tr>
                     `).join("")}

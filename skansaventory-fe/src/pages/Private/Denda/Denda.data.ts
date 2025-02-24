@@ -49,8 +49,6 @@ export interface DetailPinjam {
     id_detail_pinjam: number;
     id_inventaris: number;
     id_peminjaman: number;
-    kondisi_sebelum: number;
-    kondisi_sesudah: number;
     jumlah: number;
     created_at: Date;
     updated_at: Date;

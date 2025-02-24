@@ -19,7 +19,7 @@ const inventarisListView: FC<InventarisListProps> = ({ inventaris, inventarisLoa
                 <th>Condition</th>
                 <th>Code</th>
                 <th>Location</th>
-                <th>Action</th>
+                <th>Actions</th>
             </tr>
         )}
         renderTableBody={() => (
@@ -40,7 +40,7 @@ const inventarisListView: FC<InventarisListProps> = ({ inventaris, inventarisLoa
                                 {item.kondisi === "1" ? (
                                     <div className="badge badge-sm badge-success text-white">New</div>
                                 ) : item.kondisi === "2" ? (
-                                    <div className="badge badge-sm badge-secondary">Second</div>
+                                    <div className="badge badge-sm badge-warning text-white">Second</div>
                                 ) : (
                                     <div className="badge badge-sm bg-slate-400 text-white">Undefined</div>
                                 )}

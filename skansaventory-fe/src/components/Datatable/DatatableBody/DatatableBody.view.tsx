@@ -3,7 +3,7 @@ import { DataTableBodyProps } from "../Datatable.data";
 
 
 const DatatableBodyView: FC<DataTableBodyProps> = ({ renderTableHeader, renderTableBody }) => (
-    <div className="max-w-full overflow-y-hidden">
+    <div className="overflow-x-auto">
         <table className="table">
             <thead>
                 {renderTableHeader()}

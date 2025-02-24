@@ -12,7 +12,7 @@ export const getAllPeminjaman = async (c: Context) => {
         const startDate = c.req.query('startDate') || '';
         const endDate = c.req.query('endDate') || '';
 
-        const user = c.get("user"); 
+        const user = c.get("user");
         if (!user) {
             return baseResponse.error(c, "Unauthorized", 401);
         }
@@ -177,7 +177,8 @@ export async function createPeminjaman(c: Context) {
                     detail_pinjam: {
                         create: validatedData.detail_pinjam.map((item) => ({
                             id_inventaris: item.id_inventaris,
-                            jumlah: item.jumlah
+                            jumlah: item.jumlah,
+                            kondisi_sebelum: 1
                         }))
                     }
                 },
@@ -298,9 +299,9 @@ export const updateVervalPeminjaman = async (c: Context) => {
         const peminjaman = await prisma.$transaction(async (tx) => {
             const updatedPeminjaman = await tx.peminjaman.update({
                 where: { id_peminjaman: Number(id) },
-                data: { 
+                data: {
                     status_peminjaman: action.toString(),
-                    updated_at: new Date()
+                    updated_at: new Date().toISOString(),
                 },
                 include: { detail_pinjam: true }
             });
@@ -315,7 +316,7 @@ export const updateVervalPeminjaman = async (c: Context) => {
                         }
                     });
                 }
-            }            
+            }
 
             return updatedPeminjaman;
         });
@@ -329,3 +330,50 @@ export const updateVervalPeminjaman = async (c: Context) => {
         return baseResponse.error(c, `Error: ${e instanceof Error ? e.message : 'Unknown error'}`);
     }
 }
+
+export const checkIsOverdue = async (c: Context) => {
+    try {
+        const overdueLoans = await prisma.peminjaman.findMany({
+            where: {
+                tanggal_kembali: { not: null, lt: new Date() },
+                status_peminjaman: "3",
+            },
+        });
+
+        for (const loan of overdueLoans) {
+            await prisma.peminjaman.update({
+                where: { id_peminjaman: loan.id_peminjaman },
+                data: { status_peminjaman: "6" },
+            });
+
+            const overdueDays = Math.max(
+                1,
+                Math.floor(
+                    (new Date().getTime() - loan.tanggal_kembali!.getTime()) /
+                        (1000 * 60 * 60 * 24)
+                )
+            );
+            const fineAmount = overdueDays * 5000;
+
+            await prisma.denda.upsert({
+                where: { id_peminjaman: loan.id_peminjaman },
+                update: { jumlah_denda: { increment: fineAmount } },
+                create: {
+                    jumlah_denda: fineAmount,
+                    status: 1,
+                    keterlambatan: overdueDays,
+                    id_peminjaman: loan.id_peminjaman,
+                    tanggal_denda: new Date(),
+                },
+            });
+        }
+
+        return baseResponse.success(c, {
+            count: overdueLoans.length,
+            overdueLoans,
+        }, "Overdue status checked and fines updated");
+    } catch (error) {
+        console.error("Error checking overdue loans:", error);
+        return baseResponse.success(c, null, "Failed to check overdue loans");
+    }
+};

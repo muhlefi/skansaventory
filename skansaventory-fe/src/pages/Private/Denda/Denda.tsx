@@ -1,14 +1,14 @@
 import { FC, memo, useContext, useEffect, useState } from "react";
-import PengembalianView from "./Pengembalian.view";
+import DendaView from "./Denda.view";
 import Breadcrumbs from "../../../components/Breadcrumbs";
 import { DataTablesContext } from "../../../dataservices/datatables/data";
-import { generateBuktiPengembalian } from "../../../dataservices/document/api";
+import peminjamanApi from "../../../dataservices/peminjaman/api";
+import { generateBuktiPeminjaman } from "../../../dataservices/document/api";
 import toasterAlert from "../../../components/Alert/ToasterAlert";
 import { useQuery } from "@tanstack/react-query";
-import pengembalianApi from "../../../dataservices/pengembalian/api";
-import PengembalianModal from "./PengembalianModal";
+import ConfirmationAlert from "../../../components/Alert/ConfirmationAlert";
 
-const Pengembalian: FC = () => {
+const Denda: FC = () => {
     const [isDownloading, setIsDownloading] = useState(false);
     const { page, showPerPage, setTotalData, setTotalPage, debouncedSearch, resetContext, setTotalCurretData } = useContext(DataTablesContext);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -17,7 +17,7 @@ const Pengembalian: FC = () => {
     const { data: peminjaman, refetch: peminjamanRefetch, isLoading: peminjamanLoading } = useQuery({
         queryKey: ["peminjamanList", page, showPerPage, debouncedSearch],
         queryFn: async () => {
-            const response = await pengembalianApi.getPengembalianList(page, showPerPage as number, debouncedSearch);
+            const response = await peminjamanApi.getPeminjamanList(page, showPerPage as number, debouncedSearch);
             setTotalCurretData(response.data.items.length || 0);
             setTotalData(response.data.totalData);
             setTotalPage(response.data.totalPages);
@@ -26,7 +26,7 @@ const Pengembalian: FC = () => {
         refetchOnWindowFocus: false
     });
 
-    const handleGenerateBuktiPengembalian = async (id: number) => {
+    const handleGenerateBuktiPeminjaman = async (id: number) => {
         if (isDownloading) {
             toasterAlert.success("Receipt is already downloaded");
             return;
@@ -35,11 +35,11 @@ const Pengembalian: FC = () => {
         setIsDownloading(true);
         try {
             toasterAlert.warn("Downloading receipt...");
-            const blob = await generateBuktiPengembalian(id);
+            const blob = await generateBuktiPeminjaman(id);
             const url = window.URL.createObjectURL(blob);
             const link = document.createElement("a");
             link.href = url;
-            link.setAttribute("download", `bukti_pengembalian_${id}.pdf`);
+            link.setAttribute("download", `bukti_peminjaman_${id}.pdf`);
             document.body.appendChild(link);
             link.click();
             setIsDownloading(false);
@@ -55,30 +55,47 @@ const Pengembalian: FC = () => {
         setIsModalOpen(true);
     };
 
+    const handleReturnPeminjaman = async () => {
+        if (selectedPeminjamanId !== null) {
+            try {
+                await peminjamanApi.updateVervalPeminjaman(selectedPeminjamanId, { action: 3 });
+                toasterAlert.success("Return request has been successfully sent!");
+                peminjamanRefetch();
+            } catch (error) {
+                toasterAlert.error("Return request failed. Please try again.");
+            } finally {
+                setIsModalOpen(false);
+                setSelectedPeminjamanId(null);
+            }
+        }
+    };
+
     useEffect(() => {
         resetContext();
     }, []);
 
     return (
         <>
-            <Breadcrumbs path={[{ label: "Dashboard", href: "/dashboard" }]} title="Pengembalian" />
-            <PengembalianView
+            <Breadcrumbs path={[{ label: "Dashboard", href: "/dashboard" }]} title="Denda" />
+            <DendaView
                 peminjaman={peminjaman?.items || []}
                 peminjamanRefetch={peminjamanRefetch}
                 peminjamanLoading={peminjamanLoading}
-                generateBuktiPeminjaman={handleGenerateBuktiPengembalian}
+                generateBuktiPeminjaman={handleGenerateBuktiPeminjaman}
                 openReturnModal={openReturnModal}
             />
-            {isModalOpen && (
-                <PengembalianModal
-                    isOpen={isModalOpen}
-                    onClose={() => setIsModalOpen(false)}
-                    peminjamanId={selectedPeminjamanId || 20}
-                    refetchPengembalian={peminjamanRefetch}
-                />
-            )}
+
+            <ConfirmationAlert
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onConfirm={handleReturnPeminjaman}
+                cancelText="Cancel"
+                confirmText="Return"
+                message="Are you sure you want to return this peminjaman?"
+                title="Return Peminjaman"
+            />
         </>
     );
 };
 
-export default memo(Pengembalian);
+export default memo(Denda);

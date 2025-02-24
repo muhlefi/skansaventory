@@ -1,15 +1,22 @@
 import { FC, memo, useContext, useEffect } from "react";
 import { AuthContext } from "../../../dataservices/jwt/context";
 import UserContentView from "./UserContent.view";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import authApi from "../../../dataservices/jwt/api";
+import peminjamanApi from "../../../dataservices/peminjaman/api";
 
 const UserContent: FC = () => {
     const auth = useContext(AuthContext);
     
-    useEffect(() => {
-        auth?.verifyTokenRefetch();
-      }, []);
+    const { refetch: checkIsOverdue } = useQuery({
+        queryKey: ["checkIsOverdue"],
+        queryFn: async () => {
+            const response = await peminjamanApi.checkIsOverdue();
+            return response.data;
+        },
+        enabled: true,
+        refetchOnWindowFocus: false
+    });
 
     const logoutMutation = useMutation({
         mutationFn: async () => {
@@ -25,6 +32,11 @@ const UserContent: FC = () => {
             console.error("Login failed:", error);
         },
     });
+
+    useEffect(() => {
+        auth?.verifyTokenRefetch();
+        checkIsOverdue();
+    }, []);
 
     return <UserContentView onLogout={logoutMutation.mutate} user={auth?.verifyToken?.data} />;
 };
