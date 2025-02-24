@@ -5,7 +5,6 @@ const SECRET_KEY = new TextEncoder().encode(
   "b876tdrfcgvhhy87t6r75e4srdcgvhyfr65e4w3waezdxfcgfd5srxtcyf"
 );
 
-// 🔴 Import blacklist token
 import { blacklistedTokens } from "../controllers/AuthController";
 
 export const AuthMiddleware = async (c: Context, next: Next) => {
@@ -15,7 +14,6 @@ export const AuthMiddleware = async (c: Context, next: Next) => {
 
   const token = authHeader.split(" ")[1];
 
-  // 🔴 Cek apakah token sudah masuk blacklist
   if (blacklistedTokens.has(token)) {
     return c.json({ error: "Token revoked" }, 401);
   }

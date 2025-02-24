@@ -15,6 +15,16 @@ export const headersDefault = {
 	Authorization: `Bearer ${getAccessToken()}`,
 };
 
+export const headersPdf = {
+	'Content-Type': 'application/pdf',
+	Authorization: `Bearer ${getAccessToken()}`,
+};
+
+export const headersExcel = {
+	'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+	Authorization: `Bearer ${getAccessToken()}`,
+};
+
 export const headersMultipart = {
 	'Content-Type': 'multipart/application',
 	Authorization: `Bearer ${getAccessToken()}`,

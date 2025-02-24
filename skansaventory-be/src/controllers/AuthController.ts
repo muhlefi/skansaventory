@@ -26,6 +26,7 @@ export const login = async (c: Context) => {
 
   const accessToken = await new SignJWT({
     id_petugas: user.id_petugas,
+    id_pegawai: user.id_pegawai,
     username: user.username,
     role: user.level?.nama_level || "Unknown",
     name: user.pegawai?.nama_pegawai || "Unknown",
@@ -36,6 +37,7 @@ export const login = async (c: Context) => {
 
   const refreshToken = await new SignJWT({
     id_petugas: user.id_petugas,
+    id_pegawai: user.id_pegawai,
     username: user.username,
     role: user.level?.nama_level || "Unknown",
     name: user.pegawai?.nama_pegawai || "Unknown",
@@ -65,6 +67,7 @@ export const refreshToken = async (c: Context) => {
     const { payload } = await jwtVerify(refreshToken, SECRET_KEY);
     const newAccessToken = await new SignJWT({
       id_petugas: payload.id_petugas,
+      id_pegawai: payload.id_pegawai,
       username: payload.username,
       role: payload?.role || "Unknown",
       name: payload?.name || "Unknown",

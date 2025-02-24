@@ -28,7 +28,7 @@ const ConfirmationAlert: FC<ConfirmationAlertProps> = ({
                         <p className="py-4 text-slate-600">{message}</p>
                         <div className="modal-action flex justify-end space-x-2">
                             <button
-                                className="btn rounded-full bg-red-600 text-white hover:bg-white hover:border-red-600 hover:text-red-600"
+                                className="btn rounded-full bg-slate-900 text-white"
                                 onClick={onConfirm}
                             >
                                 {confirmText}

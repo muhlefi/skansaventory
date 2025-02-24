@@ -10,7 +10,7 @@ const PetugasListView: FC<PetugasListProps> = ({ petugas, petugasLoading, petuga
 
     return (
         <>
-            <LevelTable/>
+            <LevelTable />
             <Datatable
                 title="Users"
                 withButton={true}
@@ -42,15 +42,15 @@ const PetugasListView: FC<PetugasListProps> = ({ petugas, petugasLoading, petuga
                                     <td>{item.username}</td>
                                     <td>
                                         {item.id_level === 1 ? (
-                                            <div className="badge badge-primary">Superadmin</div>
+                                            <div className="badge badge-sm badge-primary">Superadmin</div>
                                         ) : item.id_level === 2 ? (
-                                            <div className="badge badge-warning">Operator</div>
+                                            <div className="badge badge-sm badge-warning">Operator</div>
                                         ) : (
-                                            <div className="badge badge-secondary">Staff</div>
+                                            <div className="badge badge-sm badge-secondary">Staff</div>
                                         )}
                                     </td>
                                     <td>
-                                        <div className="dropdown dropdown-end">
+                                        <div className={`dropdown ${index >= petugas.length - 2 ? 'dropdown-end' : ''} dropdown-left`}>
                                             <div tabIndex={0} role="button" className="btn btn-sm btn-ghost rounded-full">
                                                 <Ellipsis />
                                             </div>

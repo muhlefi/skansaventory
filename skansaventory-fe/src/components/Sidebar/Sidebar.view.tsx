@@ -1,9 +1,9 @@
 import { FC, memo } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { SidebarProps, links, mainMenus, reports, settings } from "./Sidebar.data";
+import { SidebarProps, operatorLink, superadminLink, userLink } from "./Sidebar.data";
 import { LayoutDashboard, Package2 } from "lucide-react";
 
-const SidebarView: FC<SidebarProps> = ({ isOpen }) => {
+const SidebarView: FC<SidebarProps> = ({ isOpen, user }) => {
     const location = useLocation();
     const isActive = (path: string) => location.pathname === path;
 
@@ -16,7 +16,7 @@ const SidebarView: FC<SidebarProps> = ({ isOpen }) => {
                 {isOpen ? <><Package2/>Skansaventory</> : <Package2/>}
             </div>
 
-            <div className="flex-1 space-y-2 overflow-y-auto px-2">
+            <div className="flex-1 space-y-2 overflow-y-auto px-2 mb-8" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}> 
                 <div className="border-b border-slate-300 mb-2 sticky top-0" />
                 <Link
                     to={'/dashboard'}
@@ -26,44 +26,11 @@ const SidebarView: FC<SidebarProps> = ({ isOpen }) => {
                     <LayoutDashboard className="w-5 h-5" />
                     {isOpen && <span className="font-medium">Dashboard</span>}
                 </Link>
-                {links.map(({ id, icon, label, path }) => (
+                {(user?.role === 'SA' ? superadminLink : user?.role === 'OP' ? operatorLink : userLink).map(({ id, icon, label, path }) => (
                     <Link
                         key={id}
                         to={path}
                         className={`w-full flex items-center gap-4 py-3 px-3 mb-1 text-sm rounded-full ${isActive(path) ?  'bg-white text-slate-900' : 'hover:bg-white hover:text-slate-900 text-white'
-                            } transition duration-200 focus:bg-white focus:text-slate-900`}
-                    >
-                        {icon}
-                        {isOpen && <span className="font-medium">{label}</span>}
-                    </Link>
-                ))}
-                {mainMenus.map(({ id, icon, label, path }) => (
-                    <Link
-                        key={id}
-                        to={path}
-                        className={`w-full flex items-center gap-4 py-3 px-3 mb-1 text-sm rounded-full ${isActive(path) ? 'bg-white text-slate-900' : 'hover:bg-white hover:text-slate-900 text-white'
-                            } transition duration-200 focus:bg-white focus:text-slate-900`}
-                    >
-                        {icon}
-                        {isOpen && <span className="font-medium">{label}</span>}
-                    </Link>
-                ))}
-                {reports.map(({ id, icon, label, path }) => (
-                    <Link
-                        key={id}
-                        to={path}
-                        className={`w-full flex items-center gap-4 py-3 px-3 mb-1 text-sm rounded-full ${isActive(path) ? 'bg-white text-slate-900' : 'hover:bg-white hover:text-slate-900 text-white'
-                            } transition duration-200 focus:bg-white focus:text-slate-900`}
-                    >
-                        {icon}
-                        {isOpen && <span className="font-medium">{label}</span>}
-                    </Link>
-                ))}
-                {settings.map(({ id, icon, label, path }) => (
-                    <Link
-                        key={id}
-                        to={path}
-                        className={`w-full flex items-center gap-4 py-3 px-3 mb-1 text-sm rounded-full ${isActive(path) ? 'bg-white text-slate-900' : 'hover:bg-white hover:text-slate-900 text-white'
                             } transition duration-200 focus:bg-white focus:text-slate-900`}
                     >
                         {icon}

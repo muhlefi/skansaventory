@@ -1,11 +1,11 @@
 import { FC, memo } from "react";
 import LoginView from "./Login.view";
-import { LoginProps } from "../Auth.data";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import authApi from "../../../../dataservices/jwt/api";
+import toasterAlert from "../../../../components/Alert/ToasterAlert";
 
-const Login: FC<LoginProps> = ({ setAuthStep }) => {
+const Login: FC = () => {
     const navigate = useNavigate();
 
     const loginMutation = useMutation({
@@ -15,15 +15,15 @@ const Login: FC<LoginProps> = ({ setAuthStep }) => {
         onSuccess: (data) => {
             localStorage.setItem("token", data.token);
             localStorage.setItem("refreshToken", data.refreshToken);
-            navigate("/master/jenis");
+            navigate("/master/jenis", { replace: true });
+            toasterAlert.success("Hey there! Login successful!");
         },
-        onError: (error) => {
-            console.error("Login failed:", error);
+        onError: () => {
+            toasterAlert.error("Username or password is incorrect. Please try again.");
         },
     });
 
     return <LoginView 
-        setAuthStep={setAuthStep} 
         onSubmit={loginMutation.mutate} 
         isLoading={loginMutation.isPending} 
     />;

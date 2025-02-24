@@ -28,6 +28,7 @@ export interface InventarisDrawerViewProps {
     inventarisById: Inventaris;  
     handleCloseDrawer: () => void;
     visibleButton: boolean;
+    petugasId: number;
 }
 
 export const inventarisSchema = Yup.object().shape({

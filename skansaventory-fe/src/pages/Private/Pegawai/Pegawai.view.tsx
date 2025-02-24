@@ -6,11 +6,11 @@ import PegawaiDrawer from "./PegawaiDrawer";
 
 const PegawaiListView: FC<PegawaiListProps> = ({ pegawai, pegawaiLoading, pegawaiRefetch, handleDeletePegawai, openEditPegawai }) => (
     <Datatable
-        title="Pegawai"
+        title="Peminjam"
         withButton={true}
         withFilter={false}
         withSearch={true}
-        renderDataButton={() => <PegawaiDrawer pegawaiRefetch={pegawaiRefetch} action={'add'} visibleButton={true}/>}
+        renderDataButton={() => <PegawaiDrawer pegawaiRefetch={pegawaiRefetch} action={'add'} visibleButton={true} />}
         renderTableHeader={() => (
             <tr className="text-slate-900 text-sm">
                 <th className="w-[10%]">No</th>
@@ -36,7 +36,7 @@ const PegawaiListView: FC<PegawaiListProps> = ({ pegawai, pegawaiLoading, pegawa
                             <td>{item.nip}</td>
                             <td>{item.alamat}</td>
                             <td>
-                                <div className="dropdown dropdown-end">
+                                <div className={`dropdown ${index >= pegawai.length - 2 ? 'dropdown-end' : ''} dropdown-left`}>
                                     <div tabIndex={0} role="button" className="btn btn-sm btn-ghost rounded-full">
                                         <Ellipsis />
                                     </div>

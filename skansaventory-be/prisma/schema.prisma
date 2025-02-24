@@ -49,6 +49,8 @@ model Inventaris {
   kondisi          String
   keterangan       String?
   jumlah           Int
+  jumlah_tersedia  Int
+  jumlah_dipinjam  Int
   id_jenis         Int
   id_ruang         Int
   id_petugas       Int

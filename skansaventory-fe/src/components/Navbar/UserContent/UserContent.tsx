@@ -15,7 +15,7 @@ const UserContent: FC = () => {
         mutationFn: async () => {
             return authApi.logout();
         },
-        onSuccess: (data) => {
+        onSuccess: () => {
             localStorage.removeItem("token");
             localStorage.removeItem("refreshToken");
             window.location.reload();

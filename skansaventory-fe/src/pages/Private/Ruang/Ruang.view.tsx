@@ -10,7 +10,7 @@ const RuangListView: FC<RuangListProps> = ({ ruang, ruangLoading, ruangRefetch, 
         withButton={true}
         withFilter={false}
         withSearch={true}
-        renderDataButton={() => <RuangDrawer ruangRefetch={ruangRefetch} action={'add'} visibleButton={true}/>}
+        renderDataButton={() => <RuangDrawer ruangRefetch={ruangRefetch} action={'add'} visibleButton={true} />}
         renderTableHeader={() => (
             <tr className="text-slate-900 text-sm">
                 <th className="w-[10%]">No</th>
@@ -34,9 +34,9 @@ const RuangListView: FC<RuangListProps> = ({ ruang, ruangLoading, ruangRefetch, 
                             <td className="font-semibold">{index + 1}</td>
                             <td>{item.nama_ruang}</td>
                             <td>{item.kode_ruang}</td>
-                            <td>{item.keterangan}</td>
+                            <td>{item.keterangan || "There is no description."}</td>
                             <td>
-                                <div className="dropdown dropdown-end">
+                                <div className={`dropdown ${index >= ruang.length - 2 ? 'dropdown-end' : ''} dropdown-left`}>
                                     <div tabIndex={0} role="button" className="btn btn-sm btn-ghost rounded-full">
                                         <Ellipsis />
                                     </div>

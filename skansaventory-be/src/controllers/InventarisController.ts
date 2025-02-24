@@ -58,7 +58,18 @@ export async function createInventaris(c: Context) {
             id_ruang: z.number().min(1),
         }).parse(body);
 
-        if (await prisma.inventaris.findFirst({ where: { nama: rules.nama, kode_inventaris: rules.kode, deleted_at: null } })) {
+        const jenis = await prisma.jenis.findUnique({
+            where: { id_jenis: rules.id_jenis },
+            select: { kode_jenis: true }
+        });
+
+        if (!jenis) {
+            return baseResponse.error(c, 'Jenis not found.');
+        }
+
+        const finalKodeInventaris = `${jenis.kode_jenis}-${rules.kode}`;
+
+        if (await prisma.inventaris.findFirst({ where: { nama: rules.nama, kode_inventaris: finalKodeInventaris, deleted_at: null } })) {
             return baseResponse.error(c, 'Code or name is already in use.');
         }
 
@@ -66,7 +77,9 @@ export async function createInventaris(c: Context) {
             data: {
                 nama: rules.nama,
                 jumlah: rules.jumlah,
-                kode_inventaris: rules.kode,
+                jumlah_dipinjam: 0,
+                jumlah_tersedia: rules.jumlah,
+                kode_inventaris: finalKodeInventaris,
                 kondisi: rules.kondisi,
                 id_petugas: rules.id_petugas,
                 id_jenis: rules.id_jenis,
@@ -158,18 +171,15 @@ export async function deleteInventaris(c: Context) {
 
 export async function getCombobox(c: Context) {
     try {
-        const result = await prisma.inventaris.findMany({
-            select: { id_inventaris: true, nama: true },
-            where: { deleted_at: null },
-            orderBy: { id_inventaris: 'desc' },
-        });
+        const result = await prisma.$queryRaw`
+            SELECT i.id_inventaris, i.nama, i.kode_inventaris, i.jumlah_tersedia, i.kondisi, r.id_ruang, r.nama_ruang
+            FROM inventaris i
+            JOIN ruang r ON i.id_ruang = r.id_ruang
+            WHERE i.deleted_at IS NULL AND i.jumlah_tersedia > 0 AND i.kondisi NOT IN ('2', '3')
+            ORDER BY i.id_inventaris DESC
+        `;
 
-        const formattedResult = result.map(j => ({
-            value: j.id_inventaris,
-            label: j.nama
-        }));
-
-        return baseResponse.success(c, formattedResult);
+        return baseResponse.success(c, result);
     } catch (e: unknown) {
         return baseResponse.error(c, `Error: ${e instanceof Error ? e.message : 'Unknown error'}`);
     }

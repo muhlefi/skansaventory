@@ -5,7 +5,7 @@ import PegawaiApi from "../../../dataservices/pegawai/api";
 import { useQuery } from "@tanstack/react-query";
 import { DataTablesContext } from "../../../dataservices/datatables/data";
 import toasterAlert from "../../../components/Alert/ToasterAlert";
-import ConfirmationAlert from "../../../components/Alert/ConfirmationAlert";
+import DeleteConfirmationAlert from "../../../components/Alert/DeleteConfirmationAlert";
 import PegawaiDrawer from "./PegawaiDrawer";
 
 const Pegawai: FC = () => {
@@ -41,10 +41,10 @@ const Pegawai: FC = () => {
         if (selectedPegawaiId !== null) {
             try {
                 await PegawaiApi.deletePegawai(selectedPegawaiId);
-                toasterAlert.success("Pegawai has been successfully deleted!");
+                toasterAlert.success("Peminjam has been successfully deleted!");
                 pegawaiRefetch();
             } catch (error) {
-                toasterAlert.error("Failed to delete Pegawai. Please try again.");
+                toasterAlert.error("Failed to delete Peminjam. Please try again.");
             } finally {
                 setIsModalOpen(false);
                 setSelectedPegawaiId(null);
@@ -64,7 +64,7 @@ const Pegawai: FC = () => {
 
     return (
         <>
-            <Breadcrumbs path={[{ label: "Dashboard", href: "/dashboard" }]} title="Pegawai" />
+            <Breadcrumbs path={[{ label: "Dashboard", href: "/dashboard" }]} title="Peminjam" />
 
             <PegawaiListView
                 pegawai={pegawai?.items || []}
@@ -75,12 +75,12 @@ const Pegawai: FC = () => {
                 openEditPegawai={openEditPegawai}
             />
 
-            <ConfirmationAlert
+            <DeleteConfirmationAlert
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 onConfirm={handleDeletePegawai}
-                title="Delete Pegawai"
-                message="Are you sure you want to delete this Pegawai?"
+                title="Delete Peminjam"
+                message="Are you sure you want to delete this Peminjam?"
                 confirmText="Delete"
                 cancelText="Cancel"
             />

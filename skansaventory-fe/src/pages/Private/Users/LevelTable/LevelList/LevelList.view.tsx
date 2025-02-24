@@ -23,7 +23,7 @@ const LevelListView: FC<LevelListViewProps> = ({ openLevelList, setOpenLevelList
                     {levelList.map(({ id, name, badgeClass }) => (
                         <tr key={id} className="text-slate-900 text-sm">
                             <th>{id}</th>
-                            <td><div className={`badge ${badgeClass}`}>{name}</div></td>
+                            <td><div className={`badge badge-sm ${badgeClass}`}>{name}</div></td>
                         </tr>
                     ))}
                 </tbody>

@@ -34,19 +34,41 @@ export const privateRoutes: Route[] = [
         label: 'Peminjaman',
         path: '/main-menu/peminjaman',
         element: createElement(lazy(
-            async () => await import('../../pages/Private/Jenis')
+            async () => await import('../../pages/Private/Peminjaman')
         ))
-    },{
+    },
+    {
+        label: 'Verval Peminjaman',
+        path: '/main-menu/peminjaman/verval-peminjaman',
+        element: createElement(lazy(
+            async () => await import('../../pages/Private/VervalPeminjaman')
+        ))
+    },
+    {
+        label: 'Verval Pengembalian',
+        path: '/main-menu/verval-pengembalian',
+        element: createElement(lazy(
+            async () => await import('../../pages/Private/Peminjaman')
+        ))
+    },
+    {
+        label: 'Form Peminjaman',
+        path: '/main-menu/peminjaman/form-peminjaman',
+        element: createElement(lazy(
+            async () => await import('../../pages/Private/Peminjaman/FormPeminjaman')
+        ))
+    },
+    {
         label: 'Pengembalian',
         path: '/main-menu/pengembalian',
         element: createElement(lazy(
-            async () => await import('../../pages/Private/Jenis')
+            async () => await import('../../pages/Private/Pengembalian')
         ))
-    },{
+    }, {
         label: 'Laporan',
         path: '/laporan',
         element: createElement(lazy(
-            async () => await import('../../pages/Private/Jenis')
+            async () => await import('../../pages/Private/Laporan')
         ))
     },
     {
@@ -57,8 +79,22 @@ export const privateRoutes: Route[] = [
         ))
     },
     {
-        label: 'Pegawai',
-        path: '/settings/pegawai',
+        label: 'Peminjam',
+        path: '/settings/peminjam',
+        element: createElement(lazy(
+            async () => await import('../../pages/Private/Pegawai')
+        ))
+    },
+    {
+        label: 'Verval Denda',
+        path: '/main-menu/verval-denda',
+        element: createElement(lazy(
+            async () => await import('../../pages/Private/Pegawai')
+        ))
+    },
+    {
+        label: 'Denda',
+        path: '/main-menu/denda',
         element: createElement(lazy(
             async () => await import('../../pages/Private/Pegawai')
         ))

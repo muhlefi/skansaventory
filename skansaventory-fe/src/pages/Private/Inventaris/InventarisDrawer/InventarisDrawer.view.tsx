@@ -4,7 +4,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Edit, Plus } from "lucide-react";
 import { InventarisDrawerViewProps, inventarisSchema } from "../Inventaris.data";
 
-const inventarisDrawerView: FC<InventarisDrawerViewProps> = ({ createInventarisMutation, action, updateInventarisMutation, inventarisById, handleCloseDrawer, visibleButton, comboboxJenis, comboboxRuang, comboboxPetugas }) => (
+const inventarisDrawerView: FC<InventarisDrawerViewProps> = ({ createInventarisMutation, action, updateInventarisMutation, inventarisById, handleCloseDrawer, visibleButton, comboboxJenis, comboboxRuang, petugasId }) => (
     <Drawer
         id={action === 'add' ? "add-inventaris" : "edit-inventaris"}
         title={action === 'add' ? "Add Inventaris" : "Edit Inventaris"}
@@ -33,7 +33,7 @@ const inventarisDrawerView: FC<InventarisDrawerViewProps> = ({ createInventarisM
                     jumlah: inventarisById?.jumlah || 0,
                     kondisi: inventarisById?.kondisi || '',
                     keterangan: inventarisById?.keterangan || '',
-                    id_petugas: inventarisById?.id_petugas || 0,
+                    id_petugas: petugasId || 0,
                     id_jenis: inventarisById?.id_jenis || 0,
                     id_ruang: inventarisById?.id_ruang || 0
                 }}
@@ -49,6 +49,19 @@ const inventarisDrawerView: FC<InventarisDrawerViewProps> = ({ createInventarisM
             >
                 {({ setFieldValue }) => (
                     <Form className="space-y-4">
+                        <div>
+                            <label className="label">
+                                <span className="label-text">Item Type</span>
+                            </label>
+                            <Field as="select" name="id_jenis" className="select select-sm select-bordered w-full rounded-full border-slate-900" onChange={(e: any) => setFieldValue('id_jenis', Number(e.target.value))}>
+                                <option value={0}>Select Item Type</option>
+                                {comboboxJenis.map(option => (
+                                    <option key={option.value} value={option.value}>{option.label}</option>
+                                ))}
+                            </Field>
+                            <ErrorMessage name="id_jenis" component="div" className="text-red-600 text-xs mt-1" />
+                        </div>
+
                         <div>
                             <label className="label">
                                 <span className="label-text">Inventaris Name</span>
@@ -96,54 +109,13 @@ const inventarisDrawerView: FC<InventarisDrawerViewProps> = ({ createInventarisM
                             <label className="label">
                                 <span className="label-text">Condition</span>
                             </label>
-                            <Field
-                                id="kondisi"
-                                name="kondisi"
-                                type="text"
-                                placeholder="Condition"
-                                className="input input-sm input-bordered w-full rounded-full border-slate-900"
-                            />
+                            <Field as="select" name="kondisi" className="select select-sm select-bordered w-full rounded-full border-slate-900">
+                                <option value="">Select Condition</option>
+                                <option value="1">Good</option>
+                                <option value="2">Damaged</option>
+                                <option value="3">Lost</option>
+                            </Field>
                             <ErrorMessage name="kondisi" component="div" className="text-red-600 text-xs mt-1" />
-                        </div>
-
-                        <div>
-                            <label className="label">
-                                <span className="label-text">Description</span>
-                            </label>
-                            <Field
-                                id="keterangan"
-                                name="keterangan"
-                                as="textarea"
-                                placeholder="Description"
-                                className="textarea textarea-sm textarea-bordered w-full rounded-2xl border-slate-900"
-                            />
-                            <ErrorMessage name="keterangan" component="div" className="text-red-600 text-xs mt-1" />
-                        </div>
-
-                        <div>
-                            <label className="label">
-                                <span className="label-text">Petugas</span>
-                            </label>
-                            <Field as="select" name="id_petugas" className="select select-sm select-bordered w-full rounded-full border-slate-900" onChange={(e: any) => setFieldValue('id_petugas', Number(e.target.value))}>
-                                <option value={0}>Select Petugas</option>
-                                {comboboxPetugas.map(option => (
-                                    <option key={option.value} value={option.value}>{option.label}</option>
-                                ))}
-                            </Field>
-                            <ErrorMessage name="id_petugas" component="div" className="text-red-600 text-xs mt-1" />
-                        </div>
-
-                        <div>
-                            <label className="label">
-                                <span className="label-text">Item Type</span>
-                            </label>
-                            <Field as="select" name="id_jenis" className="select select-sm select-bordered w-full rounded-full border-slate-900" onChange={(e: any) => setFieldValue('id_jenis', Number(e.target.value))}>
-                                <option value={0}>Select Item Type</option>
-                                {comboboxJenis.map(option => (
-                                    <option key={option.value} value={option.value}>{option.label}</option>
-                                ))}
-                            </Field>
-                            <ErrorMessage name="id_jenis" component="div" className="text-red-600 text-xs mt-1" />
                         </div>
 
                         <div>
@@ -159,6 +131,19 @@ const inventarisDrawerView: FC<InventarisDrawerViewProps> = ({ createInventarisM
                             <ErrorMessage name="id_ruang" component="div" className="text-red-600 text-xs mt-1" />
                         </div>
 
+                        <div>
+                            <label className="label">
+                                <span className="label-text">Description</span>
+                            </label>
+                            <Field
+                                id="keterangan"
+                                name="keterangan"
+                                as="textarea"
+                                placeholder="Description"
+                                className="textarea textarea-sm textarea-bordered w-full rounded-2xl border-slate-900"
+                            />
+                            <ErrorMessage name="keterangan" component="div" className="text-red-600 text-xs mt-1" />
+                        </div>
                         <div className="pt-4">
                             <button type="submit" className="btn btn-sm w-full rounded-full bg-slate-900 text-white">
                                 {action === 'add' ? 'Create' : 'Update'}

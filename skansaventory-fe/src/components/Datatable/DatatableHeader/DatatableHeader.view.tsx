@@ -20,8 +20,8 @@ const DatatableHeaderView: FC<DataTableHeaderViewProps> = ({ renderDataButton, t
                         <Filter width={15} />
                         <span>Filter</span>
                     </summary>
-                    <ul className="menu dropdown-content bg-base-100 mt-1 space-y-3 border rounded-3xl shadow-none z-[1] w-[300px] p-4">
-                        <span className="font-semibold text-lg">Filter</span>
+                    <ul className="menu dropdown-content bg-base-100 mt-1 space-y-3 border rounded-3xl shadow-none z-[1] w-[270px] p-4">
+                        <span className="font-semibold">Filter</span>
                         {renderDataFilter && renderDataFilter()}
                     </ul>
                 </details>

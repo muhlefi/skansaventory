@@ -1,10 +1,8 @@
 import { FC, memo } from "react";
 import LoginBanner from "../../../assets/login-banner.png";
 import Login from "./Login";
-import ResetPassword from "./ResetPassword";
-import { AuthProps } from "./Auth.data";
 
-const AuthView: FC<AuthProps> = ({ authStep, setAuthStep }) => (
+const AuthView: FC = () => (
     <div className="min-h-screen flex w-full" data-theme="light">
         <div className="hidden lg:grid lg:w-1/2 place-items-center bg-gradient-to-br from-slate-600 to-slate-950 relative">
             <img src={LoginBanner} className="w-full h-full object-cover opacity-40" alt="login-banner" />
@@ -21,12 +19,7 @@ const AuthView: FC<AuthProps> = ({ authStep, setAuthStep }) => (
                         Best Inventory App
                     </p>
                 </div>
-                {/* stepper */}
-                {authStep === 1 ? (
-                    <Login setAuthStep={setAuthStep} />
-                ) : authStep === 2 ? (
-                    <ResetPassword setAuthStep={setAuthStep} />
-                ) : null}
+                <Login />
             </div>
         </div>
     </div>

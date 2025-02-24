@@ -26,6 +26,7 @@ export const getAllPegawai = async (c: Context) => {
                     }
                 ],
             },
+            {},
             page,
             perPage
         )

@@ -1,14 +1,8 @@
-import { FC, memo, useState } from "react";
+import { FC, memo } from "react";
 import AuthView from "./Auth.view";
 
 const Auth: FC = () => {
-    const [authStep, setAuthStep] = useState<number>(1);
-
-
-    return <AuthView
-        authStep={authStep}
-        setAuthStep={setAuthStep}
-    />;
+    return <AuthView/>;
 };
 
 export default memo(Auth);

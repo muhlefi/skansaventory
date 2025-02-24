@@ -23,6 +23,7 @@ export const getAllJenis = async (c: Context) => {
                     },
                 ],
             },
+            {},
             page,
             perPage
         )

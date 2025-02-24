@@ -31,6 +31,8 @@ CREATE TABLE `inventaris` (
     `kondisi` VARCHAR(191) NOT NULL,
     `keterangan` VARCHAR(191) NULL,
     `jumlah` INTEGER NOT NULL,
+    `jumlah_tersedia` INTEGER NOT NULL,
+    `jumlah_dipinjam` INTEGER NOT NULL,
     `id_jenis` INTEGER NOT NULL,
     `id_ruang` INTEGER NOT NULL,
     `id_petugas` INTEGER NOT NULL,

@@ -10,17 +10,15 @@ const inventarisListView: FC<InventarisListProps> = ({ inventaris, inventarisLoa
         withButton={true}
         withFilter={false}
         withSearch={true}
-        renderDataButton={() => <InventarisDrawer inventarisRefetch={inventarisRefetch} action={'add'} visibleButton={true}/>}
+        renderDataButton={() => <InventarisDrawer inventarisRefetch={inventarisRefetch} action={'add'} visibleButton={true} />}
         renderTableHeader={() => (
             <tr className="text-slate-900 text-sm">
                 <th>No</th>
                 <th>Name</th>
-                <th>Quantity</th>
                 <th>Item Type</th>
                 <th>Condition</th>
                 <th>Code</th>
                 <th>Location</th>
-                <th>Petugas Name</th>
                 <th>Action</th>
             </tr>
         )}
@@ -28,7 +26,7 @@ const inventarisListView: FC<InventarisListProps> = ({ inventaris, inventarisLoa
             <>
                 {inventarisLoading ? (
                     <tr>
-                        <td colSpan={5} className="text-center p-4">
+                        <td colSpan={9} className="text-center p-4">
                             Loading...
                         </td>
                     </tr>
@@ -37,14 +35,20 @@ const inventarisListView: FC<InventarisListProps> = ({ inventaris, inventarisLoa
                         <tr key={item.id_inventaris} className="hover:bg-gray-100">
                             <td className="font-semibold">{index + 1}</td>
                             <td>{item.nama}</td>
-                            <td className="pl-10">{item.jumlah}</td>
                             <td>{item.nama_jenis}</td>
-                            <td>{item.kondisi}</td>
+                            <td>
+                                {item.kondisi === "1" ? (
+                                    <div className="badge badge-sm badge-success text-white">New</div>
+                                ) : item.kondisi === "2" ? (
+                                    <div className="badge badge-sm badge-secondary">Second</div>
+                                ) : (
+                                    <div className="badge badge-sm bg-slate-400 text-white">Undefined</div>
+                                )}
+                            </td>
                             <td>{item.kode_inventaris}</td>
                             <td>{item.nama_ruang}</td>
-                            <td>{item.nama_petugas}</td>
                             <td>
-                                <div className="dropdown dropdown-end">
+                                <div className={`dropdown ${index >= inventaris.length - 2 ? 'dropdown-end' : ''} dropdown-left`}>
                                     <div tabIndex={0} role="button" className="btn btn-sm btn-ghost rounded-full">
                                         <Ellipsis />
                                     </div>

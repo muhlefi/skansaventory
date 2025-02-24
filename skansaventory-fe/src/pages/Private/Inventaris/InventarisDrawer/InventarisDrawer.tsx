@@ -1,4 +1,4 @@
-import { FC, memo } from "react";
+import { FC, memo, useContext } from "react";
 import InventarisDrawerView from "./InventarisDrawer.view";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import inventarisApi from "../../../../dataservices/inventaris/api";
@@ -7,9 +7,12 @@ import { InventarisDrawerProps } from "../Inventaris.data";
 import petugasApi from "../../../../dataservices/users/api";
 import ruangApi from "../../../../dataservices/ruang/api";
 import jenisApi from "../../../../dataservices/jenis/api";
+import { AuthContext } from "../../../../dataservices/jwt/context";
 
 
 const InventarisDrawer: FC<InventarisDrawerProps> = ({ inventarisRefetch, action, selectedInventarisId, setSelectedInventarisId, visibleButton }) => {
+    const auth = useContext(AuthContext);
+
     const { data: comboboxPetugas } = useQuery({
         queryKey: ["comboboxPetugas"],
         queryFn: async () => {
@@ -100,6 +103,7 @@ const InventarisDrawer: FC<InventarisDrawerProps> = ({ inventarisRefetch, action
             inventarisById={isLoading ? null : isError ? {} : data}
             handleCloseDrawer={handleCloseDrawer}
             visibleButton={visibleButton}
+            petugasId={auth?.verifyToken?.data?.id_petugas}
         />
     );
 };

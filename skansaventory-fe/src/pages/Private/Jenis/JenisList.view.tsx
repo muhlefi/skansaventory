@@ -36,7 +36,7 @@ const JenisListView: FC<JenisListProps> = ({ jenis, jenisLoading, jenisRefetch, 
                             <td>{item.kode_jenis}</td>
                             <td>{item.keterangan}</td>
                             <td>
-                                <div className="dropdown dropdown-end">
+                                <div className={`dropdown ${index >= jenis.length - 2 ? 'dropdown-end' : ''} dropdown-left`}>
                                     <div tabIndex={0} role="button" className="btn btn-sm btn-ghost rounded-full">
                                         <Ellipsis />
                                     </div>

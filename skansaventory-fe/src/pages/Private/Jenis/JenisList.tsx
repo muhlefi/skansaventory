@@ -5,7 +5,7 @@ import jenisApi from "../../../dataservices/jenis/api";
 import { useQuery } from "@tanstack/react-query";
 import { DataTablesContext } from "../../../dataservices/datatables/data";
 import toasterAlert from "../../../components/Alert/ToasterAlert";
-import ConfirmationAlert from "../../../components/Alert/ConfirmationAlert";
+import DeleteConfirmationAlert from "../../../components/Alert/DeleteConfirmationAlert";
 import JenisDrawer from "./JenisDrawer";
 
 const Jenis: FC = () => {
@@ -75,7 +75,7 @@ const Jenis: FC = () => {
                 openEditJenis={openEditJenis}
             />
 
-            <ConfirmationAlert
+            <DeleteConfirmationAlert
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 onConfirm={handleDeleteJenis}

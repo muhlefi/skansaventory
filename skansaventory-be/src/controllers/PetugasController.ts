@@ -24,6 +24,7 @@ export const getAllPetugas = async (c: Context) => {
                     },
                 ],
             },
+            {},
             page,
             perPage
         )

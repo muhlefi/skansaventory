@@ -7,7 +7,7 @@ import { PegawaiDrawerViewProps, pegawaiSchema } from "../Pegawai.data";
 const PegawaiDrawerView: FC<PegawaiDrawerViewProps> = ({ createPegawaiMutation, action, updatePegawaiMutation, pegawaiById, handleCloseDrawer, visibleButton }) => (
     <Drawer
         id={action === 'add' ? "add-pegawai" : "edit-pegawai"}
-        title={action === 'add' ? "Add Pegawai" : "Edit Pegawai"}
+        title={action === 'add' ? "Add Peminjam" : "Edit Peminjam"}
         handleCloseDrawer={handleCloseDrawer}
         renderButtonDrawer={() => (
             <label
@@ -16,7 +16,7 @@ const PegawaiDrawerView: FC<PegawaiDrawerViewProps> = ({ createPegawaiMutation, 
             >
                 <div className="flex items-center gap-1">
                     {action === 'add' ? <Plus width={15} /> : <Edit width={15} />}
-                    <span>{action === 'add' ? 'Add New Pegawai' : 'Edit Pegawai'}</span>
+                    <span>{action === 'add' ? 'Add New Peminjam' : 'Edit Peminjam'}</span>
                 </div>
             </label>
         )}

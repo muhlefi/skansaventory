@@ -26,6 +26,7 @@ export const getAllRuang = async (c: Context) => {
                     },
                 ],
             },
+            {},
             page,
             perPage
         )

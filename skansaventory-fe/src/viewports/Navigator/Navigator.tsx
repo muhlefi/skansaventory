@@ -9,42 +9,42 @@ const Navigator: React.FC = () => {
     const token = localStorage.getItem("token");
 
     return (
-        <Suspense fallback={
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center gap-2">
-                <span className="loading loading-lg loading-spinner text-slate-600"></span>
-                <p className="text-slate-600 font-semibold">Loading</p>
-            </div>
-        }>
-            <BrowserRouter>
-                <Routes>
-                    <Route path="/" element={<Navigate to={token ? "/master/jenis" : "/auth"} />} />
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<Navigate to={token ? "/master/jenis" : "/auth"} />} />
 
-                    {publicRoutes.map((route) => (
-                        <Route key={route.path} path={route.path} element={
-                            !token ? (
-                                <HasLayout type="Public">
-                                    {route.element}
-                                </HasLayout>
-                            ) : (
-                                <Navigate to="/master/jenis" />
-                            )
-                        } />
-                    ))}
+                {publicRoutes.map((route) => (
+                    <Route key={route.path} path={route.path} element={
+                        !token ? (
+                            <HasLayout type="Public">
+                                {route.element}
+                            </HasLayout>
+                        ) : (
+                            <Navigate to="/master/jenis" />
+                        )
+                    } />
+                ))}
 
-                    {privateRoutes.map((route) => (
-                        <Route key={route.path} path={route.path} element={
-                            <HasAuthentication>
-                                <HasContext>
-                                    <HasLayout type="Private">
+                {privateRoutes.map((route) => (
+                    <Route key={route.path} path={route.path} element={
+                        <HasAuthentication>
+                            <HasContext>
+                                <HasLayout type="Private">
+                                    <Suspense fallback={
+                                        <div className="flex flex-col items-center justify-center gap-2 h-[80vh]">
+                                            <span className="loading loading-lg loading-spinner text-slate-600"></span>
+                                            <p className="text-slate-600 font-semibold">Loading</p>
+                                        </div>
+                                    }>
                                         {route.element}
-                                    </HasLayout>
-                                </HasContext>
-                            </HasAuthentication>
-                        } />
-                    ))}
-                </Routes>
-            </BrowserRouter>
-        </Suspense>
+                                    </Suspense>
+                                </HasLayout>
+                            </HasContext>
+                        </HasAuthentication>
+                    } />
+                ))}
+            </Routes>
+        </BrowserRouter>
     );
 };
 

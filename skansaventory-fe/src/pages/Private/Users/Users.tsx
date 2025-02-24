@@ -5,7 +5,7 @@ import petugasApi from "../../../dataservices/users/api";
 import { useQuery } from "@tanstack/react-query";
 import { DataTablesContext } from "../../../dataservices/datatables/data";
 import toasterAlert from "../../../components/Alert/ToasterAlert";
-import ConfirmationAlert from "../../../components/Alert/ConfirmationAlert";
+import DeleteConfirmationAlert from "../../../components/Alert/DeleteConfirmationAlert";
 import UsersDrawer from "./UsersDrawer";
 
 const Users: FC = () => {
@@ -75,7 +75,7 @@ const Users: FC = () => {
                 openEditPetugas={openEditPetugas}
             />
 
-            <ConfirmationAlert
+            <DeleteConfirmationAlert
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 onConfirm={handleDeletePetugas}
