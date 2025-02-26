@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
 
 export interface DendaViewProps {
-    denda: Denda;
+    denda: Denda[];
     dendaRefetch: () => void;
     dendaLoading: boolean;
     pegawaiIdFilter: string | null;
@@ -11,19 +11,6 @@ export interface DendaViewProps {
 }
 
 export interface Denda {
-    statistik: Statistik;
-    result: Result;
-}
-
-export interface Result {
-    page: number;
-    perPage: number;
-    totalData: number;
-    totalPages: number;
-    items: Item[];
-}
-
-export interface Item {
     id_denda: number;
     id_peminjaman: number;
     keterlambatan: number;

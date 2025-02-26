@@ -14,8 +14,8 @@ const VervalPeminjamanView: FC<PeminjamanListViewProps> = ({ peminjaman, peminja
         <Datatable
             title="Verifikasi & Validasi Peminjaman"
             withButton={false}
-            withFilter={true}
-            withSearch={true}
+            withFilter={false}
+            withSearch={false}
             renderTableHeader={() => (
                 <tr className="text-slate-900 text-sm">
                     <th>No</th>

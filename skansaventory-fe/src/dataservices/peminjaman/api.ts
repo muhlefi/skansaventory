@@ -1,9 +1,9 @@
 import apiInstance, { handleRequest } from "../axiosInstance";
 
 const peminjamanApi = {
-  getPeminjamanList: (page = 1, perPage = 10, search = "") =>
+  getPeminjamanList: (page = 1, perPage = 10, search = "",  status?: string, pegawaiId?: string) =>
     handleRequest(
-      apiInstance.get(`/peminjaman?page=${page}&perPage=${perPage}&search=${search}`)
+      apiInstance.get(`/peminjaman?page=${page}&perPage=${perPage}&search=${search}&status=${status}&pegawaiId=${pegawaiId}`)
     ),
 
   getPeminjamanById: (id: number) => handleRequest(apiInstance.get(`/peminjaman/${id}`)),

@@ -9,12 +9,12 @@ export const getAllPengembalian = async (c: Context) => {
         const page = parseInt(c.req.query('page') || '1', 10);
         const perPage = parseInt(c.req.query('perPage') || '10', 10);
         const search = c.req.query('search') || '';
-        const startDate = c.req.query('startDate') || '';
-        const endDate = c.req.query('endDate') || '';
+        const status = c.req.query('status') || '';
+        const pegawaiId = parseInt(c.req.query('pegawaiId') || '');
 
         const whereCondition: any = {
             deleted_at: null,
-            status_peminjaman: { in: ["3", "5", "4", "6", "7", "8"] },
+            status_peminjaman: status ? { in: [status] } : { in: ["3", "5", "4", "6", "7", "8"] },
             OR: [
                 {
                     pegawai: {
@@ -38,15 +38,10 @@ export const getAllPengembalian = async (c: Context) => {
             ]
         };
 
-        if (startDate && endDate) {
-            whereCondition.tanggal_pinjam = {
-                gte: new Date(startDate),
-                lte: new Date(endDate)
+        if (!isNaN(pegawaiId)) {
+            whereCondition.pegawai = {
+                id_pegawai: pegawaiId
             };
-        } else if (startDate) {
-            whereCondition.tanggal_pinjam = { gte: new Date(startDate) };
-        } else if (endDate) {
-            whereCondition.tanggal_pinjam = { lte: new Date(endDate) };
         }
 
         const result = await handlePaginate(
@@ -189,7 +184,7 @@ export const confirmReturn = async (c: Context) => {
                                 id_peminjaman: parseInt(id_peminjaman),
                                 jumlah_denda: totalDenda,
                                 keterlambatan: 0,
-                                status: 1,
+                                status: 0,
                                 tanggal_denda: new Date(),
                             },
                         });

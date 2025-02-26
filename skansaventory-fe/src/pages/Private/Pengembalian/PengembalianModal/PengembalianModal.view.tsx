@@ -48,21 +48,21 @@ const validationSchema = Yup.object().shape({
     details: Yup.array()
         .of(
             Yup.object().shape({
-                id_detail: Yup.number().required("ID barang wajib diisi"),
+                id_detail: Yup.number().required("Item ID is required"),
                 jumlah_kembali: Yup.number()
-                    .required("Jumlah kembali wajib diisi")
-                    .min(0, "Jumlah kembali tidak boleh negatif")
-                    .max(Yup.ref("jumlah_pinjam"), "Jumlah kembali tidak boleh melebihi jumlah pinjam"),
+                    .required("Return quantity is required")
+                    .min(0, "Return quantity cannot be negative")
+                    .max(Yup.ref("jumlah_pinjam"), "Return quantity cannot exceed borrowed quantity"),
                 jumlah_rusak: Yup.number()
-                    .required("Jumlah rusak wajib diisi")
-                    .min(0, "Jumlah rusak tidak boleh negatif")
-                    .max(Yup.ref("jumlah_kembali"), "Jumlah rusak tidak boleh melebihi jumlah kembali"),
+                    .required("Damaged quantity is required")
+                    .min(0, "Damaged quantity cannot be negative")
+                    .max(Yup.ref("jumlah_kembali"), "Damaged quantity cannot exceed return quantity"),
                 kondisi_sesudah: Yup.number()
-                    .required("Kondisi barang wajib dipilih")
-                    .oneOf([1, 2, 3], "Kondisi tidak valid"), // Hanya menerima 1, 2, atau 3
+                    .required("Item condition is required")
+                    .oneOf([1, 2, 3], "Invalid condition"), // Only accepts 1, 2, or 3
             })
         )
-        .required("Detail pengembalian wajib diisi"),
+        .required("Return details are required"),
 });
 
 const PengembalianModalView: FC<PengembalianModalViewProps> = ({
@@ -72,23 +72,23 @@ const PengembalianModalView: FC<PengembalianModalViewProps> = ({
     isLoading,
     isError,
 }) => {
-    // Inisialisasi nilai awal Formik
+    // Initialize Formik values
     const initialValues = {
         details: peminjaman.detail_pinjam?.map((detail) => ({
             id_detail: detail.id_detail_pinjam,
             jumlah_pinjam: detail.jumlah,
             jumlah_kembali: detail.jumlah,
             jumlah_rusak: 0,
-            kondisi_sesudah: 1, // Default: Baik
-        })) || [], // Berikan nilai default jika detail_pinjam tidak ada
+            kondisi_sesudah: 1, // Default: Good
+        })) || [], // Provide default value if detail_pinjam is empty
     };
 
-    // Jika data sedang dimuat, tampilkan loading spinner
+    // Show loading spinner if data is being fetched
     if (isLoading) {
         return (
             <dialog id="pengembalianModal" className="modal modal-open">
                 <div className="modal-box">
-                    <h3 className="font-bold text-lg">Memuat Data...</h3>
+                    <h3 className="font-bold text-lg">Loading Data...</h3>
                     <div className="flex justify-center">
                         <span className="loading loading-spinner loading-lg"></span>
                     </div>
@@ -97,16 +97,16 @@ const PengembalianModalView: FC<PengembalianModalViewProps> = ({
         );
     }
 
-    // Jika terjadi error, tampilkan pesan error
+    // Show error message if there's an error
     if (isError) {
         return (
             <dialog id="pengembalianModal" className="modal modal-open">
                 <div className="modal-box">
-                    <h3 className="font-bold text-lg">Terjadi Kesalahan</h3>
-                    <p className="text-red-500">Gagal memuat data peminjaman.</p>
+                    <h3 className="font-bold text-lg">An Error Occurred</h3>
+                    <p className="text-red-500">Failed to load borrowing data.</p>
                     <div className="modal-action">
                         <button className="btn" onClick={onClose}>
-                            Tutup
+                            Close
                         </button>
                     </div>
                 </div>
@@ -114,16 +114,16 @@ const PengembalianModalView: FC<PengembalianModalViewProps> = ({
         );
     }
 
-    // Jika detail_pinjam tidak ada, tampilkan pesan
+    // Show message if there's no detail_pinjam data
     if (!peminjaman.detail_pinjam || peminjaman.detail_pinjam.length === 0) {
         return (
             <dialog id="pengembalianModal" className="modal modal-open">
                 <div className="modal-box">
-                    <h3 className="font-bold text-lg">Tidak Ada Data</h3>
-                    <p className="text-red-500">Tidak ada detail peminjaman yang ditemukan.</p>
+                    <h3 className="font-bold text-lg">No Data Available</h3>
+                    <p className="text-red-500">No borrowing details found.</p>
                     <div className="modal-action">
                         <button className="btn" onClick={onClose}>
-                            Tutup
+                            Close
                         </button>
                     </div>
                 </div>
@@ -134,14 +134,14 @@ const PengembalianModalView: FC<PengembalianModalViewProps> = ({
     return (
         <dialog id="pengembalianModal" className="modal modal-open">
             <div className="modal-box space-y-4 rounded-3xl">
-                <h3 className="font-semibold">Form Pengembalian Barang</h3>
+                <h3 className="font-semibold">Item Return Form</h3>
                 <div className="mb-6">
-                    <p className="font-semibold">ID Peminjaman: {peminjaman.id_peminjaman}</p>
-                    <p className="font-semibold">Tgl Pinjam: {new Date(peminjaman.tanggal_pinjam).toLocaleDateString()}</p>
-                    <p className="font-semibold">Tgl Kembali: {new Date(peminjaman.tanggal_kembali).toLocaleDateString()}</p>
-                    <p className="font-semibold">Pegawai Name: {peminjaman.pegawai.nama_pegawai}</p>
+                    <p className="font-semibold">Borrowing ID: {peminjaman.id_peminjaman}</p>
+                    <p className="font-semibold">Borrow Date: {new Date(peminjaman.tanggal_pinjam).toLocaleDateString()}</p>
+                    <p className="font-semibold">Return Date: {new Date(peminjaman.tanggal_kembali).toLocaleDateString()}</p>
+                    <p className="font-semibold">Employee Name: {peminjaman.pegawai.nama_pegawai}</p>
                     <p className="font-semibold">
-                        Status Peminjaman:
+                        Borrowing Status:
                         <span className="badge badge-sm bg-primary text-white">
                             Waiting Returned
                         </span>
@@ -171,12 +171,12 @@ const PengembalianModalView: FC<PengembalianModalViewProps> = ({
                                 <table className="table w-full">
                                     <thead>
                                         <tr>
-                                            <th>Nama Barang</th>
-                                            <th>Jumlah Dipinjam</th>
-                                            <th>Kondisi Sebelum</th>
-                                            <th>Jumlah Kembali</th>
-                                            <th>Jumlah Rusak</th>
-                                            <th>Kondisi Sesudah</th>
+                                            <th>Item Name</th>
+                                            <th>Borrowed Quantity</th>
+                                            <th>Previous Condition</th>
+                                            <th>Return Quantity</th>
+                                            <th>Damaged Quantity</th>
+                                            <th>Current Condition</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -186,10 +186,10 @@ const PengembalianModalView: FC<PengembalianModalViewProps> = ({
                                                 <td>{detail.jumlah_pinjam}</td>
                                                 <td>
                                                     {peminjaman.detail_pinjam[index].kondisi_sebelum === 1
-                                                        ? "Baik"
+                                                        ? "Good"
                                                         : peminjaman.detail_pinjam[index].kondisi_sebelum === 2
-                                                            ? "Rusak"
-                                                            : "Hilang"}
+                                                            ? "Damaged"
+                                                            : "Lost"}
                                                 </td>
                                                 <td>
                                                     <Field
@@ -226,9 +226,9 @@ const PengembalianModalView: FC<PengembalianModalViewProps> = ({
                                                         className="select select-sm select-bordered w-full max-w-xs rounded-3xl border-slate-900"
                                                         onChange={(e: any) => setFieldValue(`details[${index}].kondisi_sesudah`, Number(e.target.value))}
                                                     >
-                                                        <option value={1}>Baik</option>
-                                                        <option value={2}>Rusak</option>
-                                                        <option value={3}>Hilang</option>
+                                                        <option value={1}>Good</option>
+                                                        <option value={2}>Damaged</option>
+                                                        <option value={3}>Lost</option>
                                                     </Field>
                                                     <ErrorMessage
                                                         name={`details[${index}].kondisi_sesudah`}
@@ -242,13 +242,13 @@ const PengembalianModalView: FC<PengembalianModalViewProps> = ({
                                 </table>
                             </div>
 
-                            {/* Tombol Aksi */}
+                            {/* Action Buttons */}
                             <div className="modal-action">
                                 <button type="button" className="btn btn-sm btn-outline border-slate-900 px-6 rounded-full" onClick={onClose}>
-                                    Batal
+                                    Cancel
                                 </button>
                                 <button type="submit" className="btn btn-sm bg-slate-900 text-white px-6 rounded-full">
-                                    Simpan
+                                    Save
                                 </button>
                             </div>
                         </Form>
@@ -256,9 +256,9 @@ const PengembalianModalView: FC<PengembalianModalViewProps> = ({
                 </Formik>
             </div>
 
-            {/* Overlay untuk menutup modal */}
+            {/* Overlay to close modal */}
             <form method="dialog" className="modal-backdrop">
-                <button onClick={onClose}>Tutup</button>
+                <button onClick={onClose}>Close</button>
             </form>
         </dialog>
     );

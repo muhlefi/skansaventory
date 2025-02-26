@@ -64,7 +64,7 @@ export const featuresList = [
     { name: "Logout", admin: true, operator: true, peminjam: true },
     { name: "Inventarisir", admin: true, operator: false, peminjam: false },
     { name: "Peminjaman", admin: true, operator: true, peminjam: true },
-    { name: "Pengembalian", admin: false, operator: true, peminjam: true },
+    { name: "Pengembalian", admin: true, operator: true, peminjam: false },
     { name: "Generate laporan", admin: true, operator: false, peminjam: false },
 ];
 

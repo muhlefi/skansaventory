@@ -56,6 +56,7 @@ export async function createInventaris(c: Context) {
             id_petugas: z.number().min(1),
             id_jenis: z.number().min(1),
             id_ruang: z.number().min(1),
+            harga_per_unit: z.number().min(1)
         }).parse(body);
 
         const jenis = await prisma.jenis.findUnique({
@@ -81,6 +82,7 @@ export async function createInventaris(c: Context) {
                 jumlah_tersedia: rules.jumlah,
                 kode_inventaris: finalKodeInventaris,
                 kondisi: rules.kondisi,
+                harga_per_unit: rules.harga_per_unit,
                 id_petugas: rules.id_petugas,
                 id_jenis: rules.id_jenis,
                 id_ruang: rules.id_ruang,
@@ -114,6 +116,7 @@ export async function updateInventaris(c: Context) {
             id_petugas: z.number().min(1),
             id_jenis: z.number().min(1),
             id_ruang: z.number().min(1),
+            harga_per_unit: z.number().min(1)
         }).parse(body);
 
         if (await prisma.inventaris.findFirst({ where: { nama: rules.nama, id_jenis: { not: id }, kode_inventaris: rules.kode, deleted_at: null, id_inventaris: { not: id } } })) {
@@ -128,6 +131,7 @@ export async function updateInventaris(c: Context) {
                 kode_inventaris: rules.kode,
                 kondisi: rules.kondisi,
                 keterangan: rules.keterangan,
+                harga_per_unit: rules.harga_per_unit,
                 id_petugas: rules.id_petugas,
                 id_jenis: rules.id_jenis,
                 id_ruang: rules.id_ruang,

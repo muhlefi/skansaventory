@@ -37,6 +37,7 @@ export const inventarisSchema = Yup.object().shape({
     jumlah: Yup.number().required('Quantity is required').test('not-zero', 'Quantity is required', (value) => value !== 0),
     kondisi: Yup.string().required('Condition is required'),
     keterangan: Yup.string().optional(),
+    harga_per_unit: Yup.number().required('Price per unit is required'),
     id_petugas: Yup.number().required('Petugas is required').test('not-zero', 'Petugas is required', (value) => value !== 0),
     id_jenis: Yup.number().required('Item Type is required').test('not-zero', 'Item Type is required', (value) => value !== 0),
     id_ruang: Yup.number().required('Location is required').test('not-zero', 'Location is required', (value) => value !== 0),
@@ -51,6 +52,7 @@ interface Inventaris {
     id_jenis: number;
     nama_jenis: string;
     id_ruang: number;
+    harga_per_unit: number;
     nama_ruang: string;
     id_petugas: number;
     nama_petugas: string;

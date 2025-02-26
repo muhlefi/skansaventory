@@ -13,11 +13,13 @@ const Pengembalian: FC = () => {
     const { page, showPerPage, setTotalData, setTotalPage, debouncedSearch, resetContext, setTotalCurretData } = useContext(DataTablesContext);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedPeminjamanId, setSelectedPeminjamanId] = useState<number | null>(null);
+    const [statusFilter, setStatusFilter] = useState<string | null>(null);
+    const [pegawaiIdFilter, setPegawaiIdFilter] = useState<string | null>(null);
 
     const { data: peminjaman, refetch: peminjamanRefetch, isLoading: peminjamanLoading } = useQuery({
         queryKey: ["peminjamanList", page, showPerPage, debouncedSearch],
         queryFn: async () => {
-            const response = await pengembalianApi.getPengembalianList(page, showPerPage as number, debouncedSearch);
+            const response = await pengembalianApi.getPengembalianList(page, showPerPage as number, debouncedSearch, statusFilter ?? '', pegawaiIdFilter ?? '');
             setTotalCurretData(response.data.items.length || 0);
             setTotalData(response.data.totalData);
             setTotalPage(response.data.totalPages);
@@ -68,6 +70,10 @@ const Pengembalian: FC = () => {
                 peminjamanLoading={peminjamanLoading}
                 generateBuktiPeminjaman={handleGenerateBuktiPengembalian}
                 openReturnModal={openReturnModal}
+                setStatusFilter={setStatusFilter}
+                setPegawaiIdFilter={setPegawaiIdFilter}
+                pegawaiIdFilter={pegawaiIdFilter}
+                statusFilter={statusFilter}
             />
             {isModalOpen && (
                 <PengembalianModal

@@ -6,7 +6,7 @@ export const privateRoutes: Route[] = [
         label: 'Dashboard',
         path: '/dashboard',
         element: createElement(lazy(
-            async () => await import('../../pages/Private/Jenis')
+            async () => await import('../../pages/Private/Dashboard')
         ))
     },
     {
@@ -89,7 +89,7 @@ export const privateRoutes: Route[] = [
         label: 'Verval Denda',
         path: '/main-menu/verval-denda',
         element: createElement(lazy(
-            async () => await import('../../pages/Private/Denda')
+            async () => await import('../../pages/Private/VervalDenda')
         ))
     },
     {

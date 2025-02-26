@@ -4,7 +4,7 @@ import Datatable from "../../../components/Datatable";
 import { useNavigate } from "react-router-dom";
 import { PeminjamanListViewProps } from "./Peminjaman.data";
 
-const PeminjamanView: FC<PeminjamanListViewProps> = ({ peminjaman, peminjamanLoading, generateBuktiPeminjaman, openReturnModal }) => {
+const PeminjamanView: FC<PeminjamanListViewProps> = ({ peminjaman, peminjamanLoading, generateBuktiPeminjaman, openReturnModal, statusFilter, setStatusFilter, setPegawaiIdFilter, pegawaiIdFilter, peminjamanRefetch }) => {
     const [openAccordion, setOpenAccordion] = useState<number | null>(null);
     const navigate = useNavigate();
 
@@ -16,8 +16,60 @@ const PeminjamanView: FC<PeminjamanListViewProps> = ({ peminjaman, peminjamanLoa
         <Datatable
             title="Peminjaman"
             withButton={true}
-            withFilter={false}
-            withSearch={true}
+            withFilter={true}
+            withSearch={false}
+            renderDataFilter={() => (
+                <div className="flex flex-col gap-4 items-center">
+                    <div className="w-full space-y-1">
+                        <p>Status</p>
+                        <select
+                            className="select select-sm select-bordered w-full rounded-full border-slate-900"
+                            value={statusFilter || ""}
+                            onChange={(e) => setStatusFilter((e.target.value) || '')}
+                        >
+                            <option value="">All Status</option>
+                            <option value="1">Waiting Approved</option>
+                            <option value="2">Borrowed</option>
+                            <option value="3">Waiting Returned</option>
+                            <option value="4">Returned</option>
+                            <option value="6">Overdue</option>
+                            <option value="7">Returned Damaged</option>
+                            <option value="8">Returned As Lost</option>
+                        </select>
+                    </div>
+                    <div className="w-full space-y-1">
+                        <p>Pegawai Id</p>
+                        <select
+                            className="select select-sm select-bordered w-full rounded-full border-slate-900"
+                            value={pegawaiIdFilter || ""}
+                            onChange={(e) => setPegawaiIdFilter((e.target.value) || '')}
+                        >
+                            <option value="">All Pegawai</option>
+                            <option value="1">Superadmin</option>
+                            <option value="10">Operator</option>
+                            <option value="11">Staff</option>
+                        </select>
+                    </div>
+                    <div className="flex justify-center gap-2 w-full">
+                        <button
+                            className="btn btn-sm btn-outline border-slate-900 rounded-full w-1/2"
+                            onClick={() => peminjamanRefetch()}
+                        >
+                            Apply
+                        </button>
+                        <button
+                            className="btn btn-sm bg-slate-900 text-white rounded-full w-1/2"
+                            onClick={() => {
+                                setStatusFilter(null);
+                                setPegawaiIdFilter(null);
+                                peminjamanRefetch();
+                            }}
+                        >
+                            Reset
+                        </button>
+                    </div>
+                </div>
+            )}
             renderDataButton={() => (
                 <div>
                     <button className="btn btn-sm rounded-full w-full gap-2 bg-slate-900 text-white" onClick={() => navigate('/main-menu/peminjaman/form-peminjaman')}>

@@ -1,12 +1,10 @@
 import { FC, Fragment, memo, useState } from "react";
 import { Ellipsis, FileText } from "lucide-react";
 import Datatable from "../../../components/Datatable";
-import { DendaViewProps } from "./Denda.data";
-import DendaModal from "./DendaModal"; // Import komponen modal
+import { DendaViewProps } from "./VervalDenda.data";
+import VervalDendaModal from "./VervalDendaModal"; // Import komponen modal
 
-const DendaView: FC<DendaViewProps> = ({ denda, dendaLoading, dendaRefetch, pegawaiIdFilter, setPegawaiIdFilter, setStatusFilter, statusFilter }) => {
-    const totalDendaBelumDibayar = denda?.statistik?.totalDendaBelumDibayar || 0;
-    const totalDendaTerbayarBulanIni = denda?.statistik?.totalDendaTerbayarBulanIni || 0;
+const DendaView: FC<DendaViewProps> = ({ denda, dendaLoading, dendaRefetch, pegawaiIdFilter, setPegawaiIdFilter, statusFilter, setStatusFilter }) => {
 
     // State untuk mengontrol modal
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -26,47 +24,8 @@ const DendaView: FC<DendaViewProps> = ({ denda, dendaLoading, dendaRefetch, pega
 
     return (
         <Fragment>
-            <div className="mr-8 my-8 p-6 border rounded-3xl bg-white">
-                <h2 className="font-semibold text-slate-900 mb-6">Statistik Denda</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-                    <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-6 rounded-2xl border border-blue-100">
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <p className="text-sm text-slate-500">Total Denda Belum Dibayar</p>
-                                <p className="text-2xl font-bold text-slate-900 mt-2">
-                                    Rp {totalDendaBelumDibayar.toLocaleString("id-ID")}
-                                </p>
-                            </div>
-                            <div className="bg-blue-500 p-3 rounded-full">
-                                <FileText className="text-white w-6 h-6" />
-                            </div>
-                        </div>
-                        <p className="text-xs text-slate-500 mt-2">
-                            *Denda yang belum dibayar oleh peminjam.
-                        </p>
-                    </div>
-
-                    <div className="bg-gradient-to-r from-green-50 to-green-100 p-6 rounded-2xl border border-green-100">
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <p className="text-sm text-slate-500">Total Denda Terbayar Bulan Ini</p>
-                                <p className="text-2xl font-bold text-slate-900 mt-2">
-                                    Rp {totalDendaTerbayarBulanIni.toLocaleString("id-ID")}
-                                </p>
-                            </div>
-                            <div className="bg-green-500 p-3 rounded-full">
-                                <FileText className="text-white w-6 h-6" />
-                            </div>
-                        </div>
-                        <p className="text-xs text-slate-500 mt-2">
-                            *Denda yang sudah dibayar pada bulan ini.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
             <Datatable
-                title="Denda"
+                title="Verifikasi & Validasi Denda"
                 withButton={false}
                 withFilter={true}
                 withSearch={false}
@@ -135,8 +94,8 @@ const DendaView: FC<DendaViewProps> = ({ denda, dendaLoading, dendaRefetch, pega
                                 Loading...
                             </td>
                         </tr>
-                    ) : denda?.result?.items?.length > 0 ? (
-                        denda.result.items.map((item, index) => (
+                    ) : denda?.length > 0 ? (
+                        denda.map((item, index) => (
                             <Fragment key={item.id_denda}>
                                 <tr key={item.id_denda} className="bg-slate-100">
                                     <td className="font-semibold">{index + 1}</td>
@@ -150,12 +109,12 @@ const DendaView: FC<DendaViewProps> = ({ denda, dendaLoading, dendaRefetch, pega
                                         </div>
                                     </td>
                                     <td>
-                                        <div className={`dropdown ${index >= denda.result.items.length - 2 ? 'dropdown-end' : ''} dropdown-left`}>
+                                        <div className={`dropdown ${index >= denda.length - 2 ? 'dropdown-end' : ''} dropdown-left`}>
                                             <div tabIndex={0} role="button" className="btn btn-sm btn-ghost rounded-full">
                                                 <Ellipsis />
                                             </div>
                                             <ul tabIndex={0} className="menu dropdown-content bg-base-100 space-y-1 border rounded-3xl shadow-none w-[210px] p-2 z-[1]">
-                                                {item.status === 0 && (
+                                                {item.status === 1 && (
                                                     <button
                                                         className="btn-ghost flex gap-2 text-slate-900 w-full p-1 rounded-3xl font-semibold text-left"
                                                         onClick={() => handleOpenModal(item.id_denda)}
@@ -166,7 +125,7 @@ const DendaView: FC<DendaViewProps> = ({ denda, dendaLoading, dendaRefetch, pega
                                                         </div>
                                                     </button>
                                                 )}
-                                                {item.status !== 0 && (
+                                                {item.status == 2 && (
                                                     <p className=" text-xs text-slate-500 p-1 rounded-3xl">
                                                         No Action Available.
                                                     </p>
@@ -188,7 +147,7 @@ const DendaView: FC<DendaViewProps> = ({ denda, dendaLoading, dendaRefetch, pega
             />
 
             {/* Render Modal */}
-            <DendaModal
+            <VervalDendaModal
                 isOpen={isModalOpen}
                 onClose={handleCloseModal}
                 dendaId={selectedDendaId}

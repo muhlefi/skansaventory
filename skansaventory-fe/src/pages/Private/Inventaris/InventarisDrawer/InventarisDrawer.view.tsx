@@ -33,6 +33,7 @@ const inventarisDrawerView: FC<InventarisDrawerViewProps> = ({ createInventarisM
                     jumlah: inventarisById?.jumlah || 0,
                     kondisi: inventarisById?.kondisi || '',
                     keterangan: inventarisById?.keterangan || '',
+                    harga_per_unit: inventarisById?.harga_per_unit || 0,
                     id_petugas: petugasId || 0,
                     id_jenis: inventarisById?.id_jenis || 0,
                     id_ruang: inventarisById?.id_ruang || 0
@@ -103,6 +104,21 @@ const inventarisDrawerView: FC<InventarisDrawerViewProps> = ({ createInventarisM
                                 className="input input-sm input-bordered w-full rounded-full border-slate-900"
                             />
                             <ErrorMessage name="jumlah" component="div" className="text-red-600 text-xs mt-1" />
+                        </div>
+
+                        <div>
+                            <label className="label">
+                                <span className="label-text">Price Per Unit</span>
+                            </label>
+                            <Field
+                                id="harga_per_unit"
+                                name="harga_per_unit"
+                                type="number"
+                                placeholder="Prive Per Unit"
+                                min={0}
+                                className="input input-sm input-bordered w-full rounded-full border-slate-900"
+                            />
+                            <ErrorMessage name="harga_per_unit" component="div" className="text-red-600 text-xs mt-1" />
                         </div>
 
                         <div>

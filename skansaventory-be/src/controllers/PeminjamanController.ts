@@ -9,8 +9,8 @@ export const getAllPeminjaman = async (c: Context) => {
         const page = parseInt(c.req.query('page') || '1', 10);
         const perPage = parseInt(c.req.query('perPage') || '10', 10);
         const search = c.req.query('search') || '';
-        const startDate = c.req.query('startDate') || '';
-        const endDate = c.req.query('endDate') || '';
+        const status = c.req.query('status') || '';
+        const pegawaiId = parseInt(c.req.query('pegawaiId') || '');
 
         const user = c.get("user");
         if (!user) {
@@ -19,6 +19,7 @@ export const getAllPeminjaman = async (c: Context) => {
 
         const whereCondition: any = {
             deleted_at: null,
+            status_peminjaman: status ? { in: [status] } : {},
             id_pegawai: user.id_pegawai,
             OR: [
                 {
@@ -43,15 +44,10 @@ export const getAllPeminjaman = async (c: Context) => {
             ]
         };
 
-        if (startDate && endDate) {
-            whereCondition.tanggal_pinjam = {
-                gte: new Date(startDate),
-                lte: new Date(endDate)
+        if (!isNaN(pegawaiId)) {
+            whereCondition.pegawai = {
+                id_pegawai: pegawaiId
             };
-        } else if (startDate) {
-            whereCondition.tanggal_pinjam = { gte: new Date(startDate) };
-        } else if (endDate) {
-            whereCondition.tanggal_pinjam = { lte: new Date(endDate) };
         }
 
         const result = await handlePaginate(
@@ -209,8 +205,7 @@ export const getAllVervalPeminjaman = async (c: Context) => {
         const page = parseInt(c.req.query('page') || '1', 10);
         const perPage = parseInt(c.req.query('perPage') || '10', 10);
         const search = c.req.query('search') || '';
-        const startDate = c.req.query('startDate') || '';
-        const endDate = c.req.query('endDate') || '';
+        const pegawaiId = parseInt(c.req.query('pegawaiId') || '');
 
         const whereCondition: any = {
             deleted_at: null,
@@ -238,15 +233,10 @@ export const getAllVervalPeminjaman = async (c: Context) => {
             ]
         };
 
-        if (startDate && endDate) {
-            whereCondition.tanggal_pinjam = {
-                gte: new Date(startDate),
-                lte: new Date(endDate)
+        if (!isNaN(pegawaiId)) {
+            whereCondition.pegawai = {
+                id_pegawai: pegawaiId
             };
-        } else if (startDate) {
-            whereCondition.tanggal_pinjam = { gte: new Date(startDate) };
-        } else if (endDate) {
-            whereCondition.tanggal_pinjam = { lte: new Date(endDate) };
         }
 
         const result = await handlePaginate(

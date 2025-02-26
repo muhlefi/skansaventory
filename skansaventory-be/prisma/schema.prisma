@@ -137,12 +137,14 @@ model DetailPinjam {
 }
 
 model Denda {
-  id_denda      Int       @id @default(autoincrement())
-  id_peminjaman Int       @unique
-  keterlambatan Int
-  jumlah_denda  Int
-  tanggal_denda DateTime?
-  status        Int       @default(0)
+  id_denda          Int       @id @default(autoincrement())
+  id_peminjaman     Int       @unique
+  keterlambatan     Int
+  jumlah_denda      Int
+  jumlah_pembayaran Int       @default(0)
+  tanggal_denda     DateTime?
+  status            Int       @default(0)
+  bukti_pembayaran  String  @default("")
 
   peminjaman Peminjaman @relation(fields: [id_peminjaman], references: [id_peminjaman])
 

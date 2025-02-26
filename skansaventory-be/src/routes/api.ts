@@ -9,6 +9,8 @@ import { PetugasRoutes } from './PetugasRoutes'
 import { PeminjamanRoutes } from './PeminjamanRoutes'
 import { PDFRoutes } from './PDFRoutes'
 import { PengembalianRoutes } from './PengembalianRoutes'
+import { DendaRoutes } from './DendaRoutes'
+import { DashboardRoutes } from './DashboardRoutes'
 
 const router = new Hono()
 
@@ -22,5 +24,7 @@ router.route('/inventaris', InventarisRoutes)
 router.route('/peminjaman', PeminjamanRoutes)
 router.route('/pengembalian', PengembalianRoutes)
 router.route('/dokumen', PDFRoutes)
+router.route('/denda', DendaRoutes)
+router.route('/dashboard', DashboardRoutes)
 
 export default router

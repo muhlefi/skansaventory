@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from 'react';
 import * as Yup from 'yup';
 
 export interface PeminjamanListViewProps {
@@ -6,6 +7,10 @@ export interface PeminjamanListViewProps {
     peminjamanLoading: boolean;
     openReturnModal: (id: number) => void;
     generateBuktiPeminjaman: (id: number) => Promise<void>;
+    statusFilter: string | null;
+    pegawaiIdFilter: string | null;
+    setStatusFilter: Dispatch<SetStateAction<string | null>>
+    setPegawaiIdFilter: Dispatch<SetStateAction<string | null>>
 }
 
 export interface FormPeminjamanViewProps {
